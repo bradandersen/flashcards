@@ -340,6 +340,7 @@ table.conj tr:last-child td{border-bottom:none}
 <button class="filter-btn" data-pcat="travel">Travel</button>
 <button class="filter-btn" data-pcat="opinions">Opinions</button>
 <button class="filter-btn" data-pcat="patterns">Sentence patterns</button>
+<button class="filter-btn" data-pcat="local">Local customs</button>
 </div>
 
 <div class="stats" id="stats">Card <span id="current">1</span> of <span id="total">24</span></div>
@@ -2010,7 +2011,9 @@ const phrases = [
 {greek:'Καλά, εσύ;',roman:'Kalá, esí?',en:'Fine, and you?',cat:'social'},
 {greek:'Τι κάνετε;',roman:'Ti kánete?',en:'How are you? (formal/pl)',cat:'social'},
 {greek:'Να ’σαι καλά',roman:'Na se kalá',en:'Take care / thank you (warm)',cat:'social'},
-{greek:'Καλή συνέχεια',roman:'Kalí synécheia',en:'Have a good rest of your day',cat:'social'},
+{greek:'Καλή συνέχεια',roman:'Kalí synécheia',en:'Have a good rest of your day / good continuation — when parting during the day',cat:'social'},
+{greek:'Επίσης!',roman:'Epísis!',en:'You too! / Likewise! / Ditto! — reply to «καλή συνέχεια», «καλημέρα», «να ’σαι καλά», etc.',cat:'social'},
+{greek:'Και σένα!',roman:'Ke séna!',en:'You too! — informal “same to you” (reply to a good wish)',cat:'social'},
 {greek:'Καλό βράδυ',roman:'Kaló vráthi',en:'Good evening',cat:'social'},
 {greek:'Τα λέμε!',roman:'Ta léme!',en:'See you! / Talk soon!',cat:'social'},
 {greek:'Πάμε για καφέ;',roman:'Páme ya kafé?',en:'Shall we go for coffee?',cat:'social'},
@@ -2069,7 +2072,38 @@ const phrases = [
 {greek:'Όταν…',roman:'Ótan…',en:'When…',cat:'patterns'},
 {greek:'Αν…',roman:'An…',en:'If…',cat:'patterns'},
 {greek:'Επειδή…',roman:'Epidhí…',en:'Because…',cat:'patterns'},
-{greek:'Για να…',roman:'Ya na…',en:'In order to…',cat:'patterns'}
+{greek:'Για να…',roman:'Ya na…',en:'In order to…',cat:'patterns'},
+/* Local customs — everyday Greek “when to say it” phrases */
+{greek:'Με γεια!',roman:'Me yiá!',en:'With health! — said when someone buys something new (clothes, phone, car…); short for «με υγεία»',cat:'local'},
+{greek:'Με υγεία',roman:'Me iyía',en:'With health — fuller form of «με γεια»; wish someone well with a new purchase',cat:'local'},
+{greek:'Γείτσες!',roman:'Yítses!',en:'Bless you! — said when someone sneezes (like “gesundheit”)',cat:'local'},
+{greek:'Στην υγειά σου',roman:'Stin iyía sou',en:'To your health — response after a sneeze, or a warm wish; also used when toasting one person',cat:'local'},
+{greek:'Να σου ζήσει!',roman:'Na sou zísi!',en:'May it live for you! — said to parents about a new baby (congratulations)',cat:'local'},
+{greek:'Χρόνια πολλά!',roman:'Chrónia pollá!',en:'Happy birthday! / Many years! — the standard birthday (and name-day) greeting; also used on major holidays',cat:'local'},
+{greek:'Να τα εκατοστήσεις!',roman:'Na ta ekatostíseis!',en:'May you reach 100! — extra birthday wish after «χρόνια πολλά»',cat:'local'},
+{greek:'Καλορίζικο!',roman:'Kaloríziko!',en:'May it be well-rooted! — said when someone moves into a new home',cat:'local'},
+{greek:'Καλή όρεξη!',roman:'Kalí órexi!',en:'Bon appétit! — said as people start a meal',cat:'local'},
+{greek:'Σιδερένιος! / Σιδερένια!',roman:'Sitherénios! / Sitherénia!',en:'Strong as iron! — after someone has been ill, wishing recovery/strength (m/f)',cat:'local'},
+{greek:'Περαστικά!',roman:'Perastiká!',en:'Get well soon! — when someone is sick or hurt',cat:'local'},
+{greek:'Καλή αντάμωση!',roman:'Kalí andámosi!',en:'Until we meet again! — warm goodbye when you may not see them soon',cat:'local'},
+{greek:'Στο καλό!',roman:'Sto kaló!',en:'Go well! — goodbye / farewell (literally “to the good”)',cat:'local'},
+{greek:'Καλώς ήρθες! / Καλώς ήρθατε!',roman:'Kalós írthes! / Kalós írthate!',en:'Welcome! — when someone arrives at your home or town (sing. / pl.)',cat:'local'},
+{greek:'Καλώς όρισες! / Καλώς ορίσατε!',roman:'Kalós órises! / Kalós orísate!',en:'Welcome! — reply or host greeting when receiving a guest (sing. / pl.)',cat:'local'},
+{greek:'Όπα!',roman:'Ópa!',en:'Opa! — joy, surprise, dancing, almost dropping something; very common exclamation',cat:'local'},
+{greek:'Πάμε!',roman:'Páme!',en:'Let’s go! — starting out, leaving, or encouraging action',cat:'local'},
+{greek:'Άντε μπράβο!',roman:'Áde brávo!',en:'Well done! / Come on, bravo! — praise or mild encouragement',cat:'local'},
+{greek:'Μπράβο!',roman:'Brávo!',en:'Bravo! / Well done! — general praise',cat:'local'},
+{greek:'Σιγά σιγά',roman:'Sigá sigá',en:'Slowly, slowly — “take it easy”; unhurried pace of life',cat:'local'},
+{greek:'Έλα!',roman:'Éla!',en:'Come! / Come on! — calling someone over, or “really?!” in reaction',cat:'local'},
+{greek:'Άσ’ το!',roman:'As’to!',en:'Leave it! / Never mind! — drop the subject or don’t bother',cat:'local'},
+{greek:'Τι να κάνουμε;',roman:'Ti na kánoume?',en:'What can we do? — resigned “oh well” when something can’t be fixed',cat:'local'},
+{greek:'Καλό μήνα!',roman:'Kaló mína!',en:'Good month! — said on the 1st of every month (especially common on May 1st)',cat:'local'},
+{greek:'Καλή εβδομάδα!',roman:'Kalí evthomátha!',en:'Good week! — often said on Monday',cat:'local'},
+{greek:'Καλό Σαββατοκύριακο!',roman:'Kaló Savvatokýriako!',en:'Have a good weekend!',cat:'local'},
+{greek:'Καλή δουλειά!',roman:'Kalí thoulía!',en:'Good work! / Have a good day at work! — to someone heading to or doing their job',cat:'local'},
+{greek:'Με το καλό!',roman:'Me to kaló!',en:'All the best with it! — for a new project, trip, job, or purchase',cat:'local'},
+{greek:'Να’ναι καλά!',roman:'Na’ne kalá!',en:'May they be well! — thanking someone indirectly (“thanks, and all the best to them”)',cat:'local'},
+{greek:'Φιλάκια!',roman:'Filákia!',en:'Kisses! — friendly informal goodbye (texts, friends, family)',cat:'local'}
 ];
 
 
@@ -6410,8 +6444,8 @@ document.getElementById('langSwap').addEventListener('click', function() {
 
 /* ========== VERSION & INTEGRITY ========== */
 /* When releasing a new build: set INTEGRITY_MD5 to 32 zeros, save, run the seal script (or ask for a rebuild), then paste the computed MD5 here. */
-const APP_VERSION = '1.0.1 (06.08.2026.00)';
-const INTEGRITY_MD5 = '35acca4fcc864bfba70c038bd920acb1';
+const APP_VERSION = '1.0.2 (06.08.2026.01)';
+const INTEGRITY_MD5 = '9e423cf6eb392866338d3c88d4687f31';
 const INTEGRITY_PLACEHOLDER = '00000000000000000000000000000000';
 
 /** Minimal MD5 (public-domain style) for integrity checks */
@@ -6559,6 +6593,6 @@ rebuildSearchIndex();
 verifyIntegrity();
 </script>
 <footer class="app-footer">Developed by Andelorean Enterprises, Cocoa Beach, FL</footer>
-<div class="app-version" id="appVersion">Version 1.0.1 (06.08.2026.00)</div>
+<div class="app-version" id="appVersion">Version 1.0.2 (06.08.2026.01)</div>
 </body>
 </html>
