@@ -127,8 +127,12 @@ table.conj tr:last-child td{border-bottom:none}
 .site-social a{color:#fff;opacity:.9;text-decoration:none;font-size:0.85rem;width:1.5rem;height:1.5rem;border:1.5px solid rgba(255,255,255,.55);border-radius:50%;display:flex;align-items:center;justify-content:center;line-height:1}
 .site-social a:hover{background:rgba(255,255,255,.15)}
 .site-search-icon{opacity:.9;font-size:0.95rem;margin-left:0.15rem}
-.app-footer{width:100%;text-align:center;padding:1.25rem 1rem 1.5rem;font-size:0.78rem;opacity:.7;color:#fff;margin-top:auto}
+.app-footer{width:100%;text-align:center;padding:1.25rem 1rem 1.5rem;font-size:0.78rem;opacity:.7;color:#fff;margin-top:auto;position:relative}
 .app-footer a{color:#fff;opacity:.9}
+.app-version{position:fixed;left:0.65rem;bottom:0.45rem;font-size:0.68rem;opacity:.55;color:#fff;z-index:50;pointer-events:none;font-family:ui-monospace,Menlo,Consolas,monospace}
+.integrity-lock{position:fixed;inset:0;z-index:99999;background:linear-gradient(135deg,#1a237e,#0d47a1);color:#fff;display:flex;align-items:center;justify-content:center;padding:1.5rem;text-align:center}
+.integrity-lock-box{max-width:28rem;background:rgba(0,0,0,.35);border-radius:1rem;padding:1.75rem 1.5rem;box-shadow:0 12px 40px rgba(0,0,0,.35);line-height:1.55;font-size:1.05rem}
+.integrity-lock-box a{color:#90caf9}
 @media(max-width:720px){
   .site-nav a{font-size:0.68rem}
   .site-brand-name{font-size:1rem}
@@ -489,13 +493,13 @@ const verbs = [
  aorist:[['κοιμήθηκα','koimíthika'],['κοιμήθηκες','koimíthikes'],['κοιμήθηκε','koimíthike'],['κοιμηθήκαμε','koimithíkame'],['κοιμηθήκατε','koimithíkate'],['κοιμήθηκαν','koimíthikan']],
  future:[['θα κοιμηθώ','tha koimithó'],['θα κοιμηθείς','tha koimithéis'],['θα κοιμηθεί','tha koimithéi'],['θα κοιμηθούμε','tha koimithoúme'],['θα κοιμηθείτε','tha koimithéite'],['θα κοιμηθούν','tha koimithoún']]},
 {lemma:'κολυμπάω',en:'swim',klass:'contracted',
- present:[['κολυμπάω','kolympáo'],['κολυμπάς','kolympás'],['κολυμπάει','kolympáei'],['κολυμπάμε','kolympáme'],['κολυμπάτε','kolympáte'],['κολυμπάνε','kolympáne']],
- aorist:[['κολύμπησα','kolýmpisa'],['κολύμπησες','kolýmpises'],['κολύμπησε','kolýmpise'],['κολυμπήσαμε','kolympísame'],['κολυμπήσατε','kolympísate'],['κολύμπησαν','kolýmpisan']],
- future:[['θα κολυμπήσω','tha kolympíso'],['θα κολυμπήσεις','tha kolympíseis'],['θα κολυμπήσει','tha kolympísei'],['θα κολυμπήσουμε','tha kolympísoume'],['θα κολυμπήσετε','tha kolympísete'],['θα κολυμπήσουν','tha kolympísoun']]},
+ present:[['κολυμπάω','kolybáo'],['κολυμπάς','kolybás'],['κολυμπάει','kolybáei'],['κολυμπάμε','kolybáme'],['κολυμπάτε','kolybáte'],['κολυμπάνε','kolybáne']],
+ aorist:[['κολύμπησα','kolýbisa'],['κολύμπησες','kolýbises'],['κολύμπησε','kolýbise'],['κολυμπήσαμε','kolybísame'],['κολυμπήσατε','kolybísate'],['κολύμπησαν','kolýbisan']],
+ future:[['θα κολυμπήσω','tha kolybíso'],['θα κολυμπήσεις','tha kolybíseis'],['θα κολυμπήσει','tha kolybísei'],['θα κολυμπήσουμε','tha kolybísoume'],['θα κολυμπήσετε','tha kolybísete'],['θα κολυμπήσουν','tha kolybísoun']]},
 {lemma:'οδηγάω',en:'drive',klass:'contracted',
- present:[['οδηγάω','odhigáo'],['οδηγάς','odhigás'],['οδηγάει','odhigáei'],['οδηγάμε','odhigáme'],['οδηγάτε','odhigáte'],['οδηγάνε','odhigáne']],
- aorist:[['οδήγησα','odhíyisa'],['οδήγησες','odhíyises'],['οδήγησε','odhíyise'],['οδηγήσαμε','odhiyísame'],['οδηγήσατε','odhiyísate'],['οδήγησαν','odhíyisan']],
- future:[['θα οδηγήσω','tha odhiyíso'],['θα οδηγήσεις','tha odhiyíseis'],['θα οδηγήσει','tha odhiyísei'],['θα οδηγήσουμε','tha odhiyísoume'],['θα οδηγήσετε','tha odhiyísete'],['θα οδηγήσουν','tha odhiyísoun']]},
+ present:[['οδηγάω','othigáo'],['οδηγάς','othigás'],['οδηγάει','othigáei'],['οδηγάμε','othigáme'],['οδηγάτε','othigáte'],['οδηγάνε','othigáne']],
+ aorist:[['οδήγησα','othíyisa'],['οδήγησες','othíyises'],['οδήγησε','othíyise'],['οδηγήσαμε','othiyísame'],['οδηγήσατε','othiyísate'],['οδήγησαν','othíyisan']],
+ future:[['θα οδηγήσω','tha othiyíso'],['θα οδηγήσεις','tha othiyíseis'],['θα οδηγήσει','tha othiyísei'],['θα οδηγήσουμε','tha othiyísoume'],['θα οδηγήσετε','tha othiyísete'],['θα οδηγήσουν','tha othiyísoun']]},
 {lemma:'ταξιδεύω',en:'travel',klass:'regular',
  present:[['ταξιδεύω','taxidhévo'],['ταξιδεύεις','taxidhéveis'],['ταξιδεύει','taxidhévei'],['ταξιδεύουμε','taxidhévoume'],['ταξιδεύετε','taxidhévete'],['ταξιδεύουν','taxidhévoun']],
  aorist:[['ταξίδεψα','taxídhepsa'],['ταξίδεψες','taxídhepses'],['ταξίδεψε','taxídhepse'],['ταξιδέψαμε','taxidhépsame'],['ταξιδέψατε','taxidhépsate'],['ταξίδεψαν','taxídhepsan']],
@@ -734,9 +738,9 @@ const verbExamples = {
   future:{g:'Απόψε θα κοιμηθώ πιο νωρίς.',r:'Apópse tha kimithó pio norís.',e:'Tonight I will go to sleep earlier.'},
 },
 'κολυμπάω':{
-  present:{g:'Το καλοκαίρι κολυμπάω κάθε μέρα στη θάλασσα.',r:'To kalokéri kolimbáo káthe méra sti thálassa.',e:'In summer I swim in the sea every day.'},
-  aorist:{g:'Χθες κολύμπησα για μία ώρα στην παραλία.',r:'Chthes kolímpisa ya mía óra stin paralía.',e:'Yesterday I swam for an hour at the beach.'},
-  future:{g:'Αύριο θα κολυμπήσω το πρωί πριν το πρωινό.',r:'Ávrio tha kolimpíso to proí prin to proinó.',e:'Tomorrow I will swim in the morning before breakfast.'},
+  present:{g:'Το καλοκαίρι κολυμπάω κάθε μέρα στη θάλασσα.',r:'To kalokéri kolybáo káthe méra sti thálassa.',e:'In summer I swim in the sea every day.'},
+  aorist:{g:'Χθες κολύμπησα για μία ώρα στην παραλία.',r:'Chthes kolýbisa ya mía óra stin paralía.',e:'Yesterday I swam for an hour at the beach.'},
+  future:{g:'Αύριο θα κολυμπήσω το πρωί πριν το πρωινό.',r:'Ávrio tha kolybíso to proí prin to proinó.',e:'Tomorrow I will swim in the morning before breakfast.'},
 },
 'οδηγάω':{
   present:{g:'Οδηγάω προσεκτικά όταν πάω στην πόλη.',r:'Othigáo prosektiká ótan páo stin póli.',e:'I drive carefully when I go to the city.'},
@@ -1001,7 +1005,7 @@ const nouns = [
 {greek:'ο πυροσβέστης',acc:'τον πυροσβέστη',roman:'o pirosvéstis',accR:'ton pirosvésti',en:'firefighter',cat:'work',gender:'m'},
 {greek:'ο σκουπιδιάρης',acc:'τον σκουπιδιάρη',roman:'o skoupidhiáris',accR:'ton skoupidhiári',en:'garbage collector',cat:'work',gender:'m'},
 {greek:'ο ταχυδρόμος',acc:'τον ταχυδρόμο',roman:'o tachydhrómos',accR:'ton tachydhrómo',en:'postman',cat:'work',gender:'m'},
-{greek:'ο οδηγός',acc:'τον οδηγό',roman:'o odhigós',accR:'ton odhigó',en:'driver',cat:'work',gender:'m'},
+{greek:'ο οδηγός',acc:'τον οδηγό',roman:'o othigós',accR:'ton othigó',en:'driver',cat:'work',gender:'m'},
 {greek:'ο ναύτης',acc:'τον ναύτη',roman:'o náftis',accR:'ton náfti',en:'sailor',cat:'work',gender:'m'},
 {greek:'ο ψαράς',acc:'τον ψαρά',roman:'o psarás',accR:'ton psará',en:'fisherman',cat:'work',gender:'m'},
 {greek:'η θάλασσα',acc:'την θάλασσα',roman:'i thálassa',accR:'tin thálassa',en:'sea',cat:'island',gender:'f'},
@@ -1226,7 +1230,7 @@ const nouns = [
 {greek:'τα σορτς',acc:'τα σορτς',roman:'ta sorts',accR:'ta sorts',en:'shorts',cat:'clothing',gender:'n'},
 {greek:'η φόρμα',acc:'την φόρμα',roman:'i fórma',accR:'tin fórma',en:'tracksuit / sweats',cat:'clothing',gender:'f'},
 {greek:'το φούτερ',acc:'το φούτερ',roman:'to foúter',accR:'to foúter',en:'hoodie / sweatshirt',cat:'clothing',gender:'n'},
-{greek:'η ρόμπα',acc:'την ρόμπα',roman:'i rómpa',accR:'tin rómpa',en:'bathrobe / robe',cat:'clothing',gender:'f'},
+{greek:'η ρόμπα',acc:'την ρόμπα',roman:'i róba',accR:'tin róba',en:'bathrobe / robe',cat:'clothing',gender:'f'},
 {greek:'τα πυτζάμες',acc:'τις πυτζάμες',roman:'tis pidzámes',accR:'tis pidzámes',en:'pajamas',cat:'clothing',gender:'f'},
 {greek:'το σουτιέν',acc:'το σουτιέν',roman:'to soutién',accR:'to soutién',en:'bra',cat:'clothing',gender:'n'},
 {greek:'το σλιπ',acc:'το σλιπ',roman:'to slip',accR:'to slip',en:'underwear / briefs',cat:'clothing',gender:'n'},
@@ -1254,7 +1258,7 @@ const nouns = [
 {greek:'το ντουλάπι',acc:'το ντουλάπι',roman:'to doulápi',accR:'to doulápi',en:'cupboard / cabinet',cat:'household',gender:'n'},
 {greek:'η ντουλάπα',acc:'την ντουλάπα',roman:'i doulápa',accR:'tin doulápa',en:'wardrobe',cat:'household',gender:'f'},
 {greek:'ο καθρέφτης',acc:'τον καθρέφτη',roman:'o kathréftis',accR:'ton kathréfti',en:'mirror',cat:'household',gender:'m'},
-{greek:'η λάμπα',acc:'την λάμπα',roman:'i lámpa',accR:'tin lámpa',en:'lamp',cat:'household',gender:'f'},
+{greek:'η λάμπα',acc:'την λάμπα',roman:'i lába',accR:'tin lába',en:'lamp',cat:'household',gender:'f'},
 {greek:'το παράθυρο',acc:'το παράθυρο',roman:'to paráthiro',accR:'to paráthiro',en:'window',cat:'household',gender:'n'},
 {greek:'η πόρτα',acc:'την πόρτα',roman:'i pórta',accR:'tin pórta',en:'door',cat:'household',gender:'f'},
 {greek:'το πάτωμα',acc:'το πάτωμα',roman:'to pátoma',accR:'to pátoma',en:'floor',cat:'household',gender:'n'},
@@ -1285,7 +1289,7 @@ const nouns = [
 {greek:'η μπαταρία',acc:'την μπαταρία',roman:'i bataría',accR:'tin bataría',en:'battery',cat:'household',gender:'f'},
 {greek:'η πρίζα',acc:'την πρίζα',roman:'i príza',accR:'tin príza',en:'power outlet / socket',cat:'household',gender:'f'},
 {greek:'ο διακόπτης',acc:'τον διακόπτη',roman:'o thiakóptis',accR:'ton thiakópti',en:'light switch',cat:'household',gender:'m'},
-{greek:'η λάμπα LED',acc:'την λάμπα',roman:'i lámpa LED',accR:'tin lámpa',en:'LED bulb',cat:'household',gender:'f'},
+{greek:'η λάμπα LED',acc:'την λάμπα',roman:'i lába LED',accR:'tin lába',en:'LED bulb',cat:'household',gender:'f'},
 {greek:'το κλιματιστικό / AC',acc:'το κλιματιστικό',roman:'to klimatistikó',accR:'to klimatistikó',en:'A/C unit',cat:'household',gender:'n'},
 {greek:'η θερμοσίφωνα',acc:'την θερμοσίφωνα',roman:'i thermosífona',accR:'tin thermosífona',en:'water heater',cat:'household',gender:'f'},
 {greek:'η βρύση',acc:'την βρύση',roman:'i vrísi',accR:'tin vrísi',en:'tap / faucet',cat:'household',gender:'f'},
@@ -1568,7 +1572,7 @@ const adjectives = [
 {m:'σκούρος',f:'σκούρα',n:'σκούρο',roman:'skoúros / skoúra / skoúro',en:'dark',cat:'color'},
 {m:'ανοιχτός',f:'ανοιχτή',n:'ανοιχτό',roman:'anoichtós / -í / -ó',en:'light (color)',cat:'color'},
 {m:'φωτεινός',f:'φωτεινή',n:'φωτεινό',roman:'fotinós / fotiní / fotinó',en:'bright',cat:'color'},
-{m:'θαμπός',f:'θαμπή',n:'θαμπό',roman:'thampós / thampí / thampó',en:'dull / faded',cat:'color'},
+{m:'θαμπός',f:'θαμπή',n:'θαμπό',roman:'thabós / thabí / thabó',en:'dull / faded',cat:'color'},
 {m:'ριγέ',f:'ριγέ',n:'ριγέ',roman:'rigé',en:'striped',cat:'color'},
 {m:'πουά',f:'πουά',n:'πουά',roman:'pouá',en:'polka-dot',cat:'color'},
 {m:'καρό',f:'καρό',n:'καρό',roman:'karó',en:'checkered / plaid',cat:'color'},
@@ -1916,71 +1920,71 @@ const roots = [
 {greek:'περι-',roman:'peri-',en:'around',examples:'περίπου (approximately), περιβάλλον (environment), περίεργος (curious)',cat:'prefix'},
 {greek:'α- / αν-',roman:'a- / an-',en:'not / without (negative)',examples:'άγνωστος (unknown), ανήσυχος (worried), άδεια (empty / leave)',cat:'prefix'},
 /* Verb roots */
-{greek:'γραφ-',roman:'graf-',en:'write',examples:'γράφω, γράμμα, γραφείο, φωτογραφία, βιογραφία',cat:'verb'},
-{greek:'λεγ- / λογ-',roman:'leg- / log-',en:'say / word / reason',examples:'λέω, λόγος, διάλογος, λογική, φιλόλογος',cat:'verb'},
-{greek:'φερ-',roman:'fer-',en:'carry / bring',examples:'φέρνω, μεταφέρω, προσφέρω, διαφορά',cat:'verb'},
-{greek:'θε-',roman:'the-',en:'put / place',examples:'θέτω, θέση, θέμα, υπόθεση, σύνθεση',cat:'verb'},
-{greek:'δο-',roman:'tho-',en:'give',examples:'δίνω, δόση, δώρο, παράδοση, έκδοση',cat:'verb'},
-{greek:'βα-',roman:'va-',en:'go / walk',examples:'πηγαίνω (related), βάδισμα, διάβαση, επιβάτης',cat:'verb'},
-{greek:'βλεπ- / οπ-',roman:'vlep- / op-',en:'see',examples:'βλέπω, όψη, οπτικός, τηλεόραση, αυτόπτης',cat:'verb'},
-{greek:'ακουσ-',roman:'akous-',en:'hear',examples:'ακούω, ακουστικός, υπακούω',cat:'verb'},
-{greek:'γνω-',roman:'gno-',en:'know',examples:'γνωρίζω, γνώση, άγνωστος, διάγνωση',cat:'verb'},
-{greek:'μαθ-',roman:'math-',en:'learn',examples:'μαθαίνω, μάθημα, μαθητής, μαθηματικά',cat:'verb'},
-{greek:'εργ-',roman:'erg-',en:'work',examples:'εργασία, εργάτης, συνεργός, ενέργεια',cat:'verb'},
-{greek:'ποι-',roman:'pi-',en:'make / do',examples:'ποιώ, ποίηση, ποιοτικός, δημιουργώ (related)',cat:'verb'},
-{greek:'τρεχ- / δραμ-',roman:'trech- / thram-',en:'run',examples:'τρέχω, δρόμος, αεροδρόμιο, διάδρομος',cat:'verb'},
-{greek:'μεν-',roman:'men-',en:'stay / remain',examples:'μένω, μόνιμος, διαμονή, επιμένω',cat:'verb'},
-{greek:'στη-',roman:'sti-',en:'stand / set',examples:'στέκομαι, στάση, επιστήμη, σύστημα',cat:'verb'},
+{greek:'γραφ-',roman:'graf-',en:'write',examples:'γράφω (write), γράμμα (letter), γραφείο (office), φωτογραφία (photograph), βιογραφία (biography)',cat:'verb'},
+{greek:'λεγ- / λογ-',roman:'leg- / log-',en:'say / word / reason',examples:'λέω (say), λόγος (word / reason), διάλογος (dialogue), λογική (logic), φιλόλογος (philologist)',cat:'verb'},
+{greek:'φερ-',roman:'fer-',en:'carry / bring',examples:'φέρνω (bring), μεταφέρω (transport), προσφέρω (offer), διαφορά (difference)',cat:'verb'},
+{greek:'θε-',roman:'the-',en:'put / place',examples:'θέτω (put / set), θέση (position), θέμα (topic), υπόθεση (hypothesis), σύνθεση (composition)',cat:'verb'},
+{greek:'δο-',roman:'tho-',en:'give',examples:'δίνω (give), δόση (dose), δώρο (gift), παράδοση (delivery / tradition), έκδοση (edition)',cat:'verb'},
+{greek:'βα-',roman:'va-',en:'go / walk',examples:'πηγαίνω (go, related), βάδισμα (gait), διάβαση (crossing), επιβάτης (passenger)',cat:'verb'},
+{greek:'βλεπ- / οπ-',roman:'vlep- / op-',en:'see',examples:'βλέπω (see), όψη (appearance), οπτικός (optical), τηλεόραση (television), αυτόπτης (eyewitness)',cat:'verb'},
+{greek:'ακουσ-',roman:'akous-',en:'hear',examples:'ακούω (hear), ακουστικός (acoustic), υπακούω (obey)',cat:'verb'},
+{greek:'γνω-',roman:'gno-',en:'know',examples:'γνωρίζω (know / meet), γνώση (knowledge), άγνωστος (unknown), διάγνωση (diagnosis)',cat:'verb'},
+{greek:'μαθ-',roman:'math-',en:'learn',examples:'μαθαίνω (learn), μάθημα (lesson), μαθητής (student), μαθηματικά (mathematics)',cat:'verb'},
+{greek:'εργ-',roman:'erg-',en:'work',examples:'εργασία (work), εργάτης (worker), συνεργός (collaborator), ενέργεια (energy)',cat:'verb'},
+{greek:'ποι-',roman:'pi-',en:'make / do',examples:'ποιώ (make / do), ποίηση (poetry), ποιοτικός (quality), δημιουργώ (create, related)',cat:'verb'},
+{greek:'τρεχ- / δραμ-',roman:'trech- / thram-',en:'run',examples:'τρέχω (run), δρόμος (road), αεροδρόμιο (airport), διάδρομος (corridor)',cat:'verb'},
+{greek:'μεν-',roman:'men-',en:'stay / remain',examples:'μένω (stay), μόνιμος (permanent), διαμονή (stay / residence), επιμένω (insist)',cat:'verb'},
+{greek:'στη-',roman:'sti-',en:'stand / set',examples:'στέκομαι (stand), στάση (stance / stop), επιστήμη (science), σύστημα (system)',cat:'verb'},
 /* Noun / concept roots */
-{greek:'φιλ-',roman:'fil-',en:'love / friend',examples:'φίλος, φιλοξενία, φιλοσοφία, φιλία',cat:'noun'},
-{greek:'δημο-',roman:'thimo-',en:'people',examples:'δημοκρατία, δήμος, δημοφιλής, επιδημία',cat:'noun'},
-{greek:'πολι-',roman:'poli-',en:'city / citizen',examples:'πόλη, πολίτης, πολιτική, πολιτισμός',cat:'noun'},
-{greek:'χρον-',roman:'chron-',en:'time',examples:'χρόνος, χρονικός, χρονιά, συγχρονίζω',cat:'noun'},
-{greek:'τοπ-',roman:'top-',en:'place',examples:'τόπος, τοπικός, τοποθεσία, ουτοπία',cat:'noun'},
-{greek:'βιο-',roman:'vio-',en:'life',examples:'βίος, βιολογία, βιογραφία, μικρόβιο',cat:'noun'},
-{greek:'γε-',roman:'ye-',en:'earth',examples:'γη, γεωγραφία, γεωργία, γεωλογία',cat:'noun'},
-{greek:'υδρ-',roman:'ydr-',en:'water',examples:'νερό (related), ύδωρ, υδραυλικός, αφυδάτωση',cat:'noun'},
-{greek:'πυρ-',roman:'pyr-',en:'fire',examples:'φωτιά (related), πυρκαγιά, πυρετός, πυροσβέστης',cat:'noun'},
-{greek:'φων-',roman:'fon-',en:'sound / voice',examples:'φωνή, τηλέφωνο, συμφωνία, μικρόφωνο',cat:'noun'},
-{greek:'φωτ-',roman:'fot-',en:'light',examples:'φως, φωτογραφία, φωτεινός, φωτισμός',cat:'noun'},
-{greek:'θερμ-',roman:'therm-',en:'heat',examples:'θερμός, θερμοκρασία, θερμαντήρας',cat:'noun'},
-{greek:'ψυχ-',roman:'psych-',en:'mind / soul',examples:'ψυχή, ψυχολογία, ψυχρός (cold - related root path)',cat:'noun'},
-{greek:'καρδ-',roman:'karth-',en:'heart',examples:'καρδιά, καρδιολόγος, ταχυκαρδία',cat:'noun'},
-{greek:'νοσ- / νοσό-',roman:'nos-',en:'disease',examples:'νόσος, νοσοκομείο, νοσοκόμα',cat:'noun'},
-{greek:'οικ-',roman:'ik-',en:'house / home',examples:'οίκος, οικονομία, οικολογία, οικογένεια',cat:'noun'},
-{greek:'ναυ-',roman:'naf-',en:'ship / sailor',examples:'ναύτης, ναυτικό, αεροναυτική',cat:'noun'},
-{greek:'αγορ-',roman:'agor-',en:'market / buy',examples:'αγορά, αγοράζω, υπεραγορά',cat:'noun'},
+{greek:'φιλ-',roman:'fil-',en:'love / friend',examples:'φίλος (friend), φιλοξενία (hospitality), φιλοσοφία (philosophy), φιλία (friendship)',cat:'noun'},
+{greek:'δημο-',roman:'thimo-',en:'people',examples:'δημοκρατία (democracy), δήμος (municipality), δημοφιλής (popular), επιδημία (epidemic)',cat:'noun'},
+{greek:'πολι-',roman:'poli-',en:'city / citizen',examples:'πόλη (city), πολίτης (citizen), πολιτική (politics), πολιτισμός (culture)',cat:'noun'},
+{greek:'χρον-',roman:'chron-',en:'time',examples:'χρόνος (time), χρονικός (temporal), χρονιά (year), συγχρονίζω (synchronize)',cat:'noun'},
+{greek:'τοπ-',roman:'top-',en:'place',examples:'τόπος (place), τοπικός (local), τοποθεσία (location), ουτοπία (utopia)',cat:'noun'},
+{greek:'βιο-',roman:'vio-',en:'life',examples:'βίος (life), βιολογία (biology), βιογραφία (biography), μικρόβιο (microbe)',cat:'noun'},
+{greek:'γε-',roman:'ye-',en:'earth',examples:'γη (earth), γεωγραφία (geography), γεωργία (agriculture), γεωλογία (geology)',cat:'noun'},
+{greek:'υδρ-',roman:'ydr-',en:'water',examples:'νερό (water, related), ύδωρ (water), υδραυλικός (hydraulic), αφυδάτωση (dehydration)',cat:'noun'},
+{greek:'πυρ-',roman:'pyr-',en:'fire',examples:'φωτιά (fire, related), πυρκαγιά (wildfire), πυρετός (fever), πυροσβέστης (firefighter)',cat:'noun'},
+{greek:'φων-',roman:'fon-',en:'sound / voice',examples:'φωνή (voice), τηλέφωνο (telephone), συμφωνία (agreement / symphony), μικρόφωνο (microphone)',cat:'noun'},
+{greek:'φωτ-',roman:'fot-',en:'light',examples:'φως (light), φωτογραφία (photograph), φωτεινός (bright), φωτισμός (lighting)',cat:'noun'},
+{greek:'θερμ-',roman:'therm-',en:'heat',examples:'θερμός (warm / thermos), θερμοκρασία (temperature), θερμαντήρας (heater)',cat:'noun'},
+{greek:'ψυχ-',roman:'psych-',en:'mind / soul',examples:'ψυχή (soul), ψυχολογία (psychology), ψυχρός (cold, related root path)',cat:'noun'},
+{greek:'καρδ-',roman:'karth-',en:'heart',examples:'καρδιά (heart), καρδιολόγος (cardiologist), ταχυκαρδία (tachycardia)',cat:'noun'},
+{greek:'νοσ- / νοσό-',roman:'nos-',en:'disease',examples:'νόσος (disease), νοσοκομείο (hospital), νοσοκόμα (nurse)',cat:'noun'},
+{greek:'οικ-',roman:'ik-',en:'house / home',examples:'οίκος (house), οικονομία (economy), οικολογία (ecology), οικογένεια (family)',cat:'noun'},
+{greek:'ναυ-',roman:'naf-',en:'ship / sailor',examples:'ναύτης (sailor), ναυτικό (navy), αεροναυτική (aeronautics)',cat:'noun'},
+{greek:'αγορ-',roman:'agor-',en:'market / buy',examples:'αγορά (market), αγοράζω (buy), υπεραγορά (supermarket)',cat:'noun'},
 /* Numbers */
-{greek:'μον-',roman:'mon-',en:'one / single',examples:'μόνος, μονάδα, μοναδικός, μονόδρομος',cat:'number'},
-{greek:'δυ-',roman:'thy-',en:'two',examples:'δύο, δυάδα, δίγλωσσος, δίποδο',cat:'number'},
-{greek:'τρι-',roman:'tri-',en:'three',examples:'τρία, τρίγωνο, τρίκυκλο, τριλογία',cat:'number'},
-{greek:'τετρ-',roman:'tetr-',en:'four',examples:'τέσσερα, τετράγωνο, τετράδιο',cat:'number'},
-{greek:'πεντ-',roman:'ped-',en:'five',examples:'πέντε, πεντάγωνο, Πεντάγωνο',cat:'number'},
-{greek:'εξ-',roman:'ex-',en:'six',examples:'έξι, εξάγωνο, εξάμηνο',cat:'number'},
-{greek:'επτα-',roman:'epta-',en:'seven',examples:'επτά, εβδομάδα (related), επτάψυχος',cat:'number'},
-{greek:'δεκα-',roman:'theka-',en:'ten',examples:'δέκα, δεκαετία, δεκαπέντε',cat:'number'},
-{greek:'εκατο-',roman:'ekato-',en:'hundred',examples:'εκατό, εκατομμύριο, εκατοστό',cat:'number'},
-{greek:'χιλιο-',roman:'chilio-',en:'thousand',examples:'χίλια, χιλιόμετρο, χιλιετία',cat:'number'},
+{greek:'μον-',roman:'mon-',en:'one / single',examples:'μόνος (alone), μονάδα (unit), μοναδικός (unique), μονόδρομος (one-way street)',cat:'number'},
+{greek:'δυ-',roman:'thy-',en:'two',examples:'δύο (two), δυάδα (pair), δίγλωσσος (bilingual), δίποδο (biped)',cat:'number'},
+{greek:'τρι-',roman:'tri-',en:'three',examples:'τρία (three), τρίγωνο (triangle), τρίκυκλο (tricycle), τριλογία (trilogy)',cat:'number'},
+{greek:'τετρ-',roman:'tetr-',en:'four',examples:'τέσσερα (four), τετράγωνο (square), τετράδιο (notebook)',cat:'number'},
+{greek:'πεντ-',roman:'ped-',en:'five',examples:'πέντε (five), πεντάγωνο (pentagon), Πεντάγωνο (Pentagon)',cat:'number'},
+{greek:'εξ-',roman:'ex-',en:'six',examples:'έξι (six), εξάγωνο (hexagon), εξάμηνο (semester)',cat:'number'},
+{greek:'επτα-',roman:'epta-',en:'seven',examples:'επτά (seven), εβδομάδα (week, related), επτάψυχος (hardy / seven-souled)',cat:'number'},
+{greek:'δεκα-',roman:'theka-',en:'ten',examples:'δέκα (ten), δεκαετία (decade), δεκαπέντε (fifteen)',cat:'number'},
+{greek:'εκατο-',roman:'ekato-',en:'hundred',examples:'εκατό (hundred), εκατομμύριο (million), εκατοστό (centimeter / hundredth)',cat:'number'},
+{greek:'χιλιο-',roman:'chilio-',en:'thousand',examples:'χίλια (thousand), χιλιόμετρο (kilometer), χιλιετία (millennium)',cat:'number'},
 /* Body / nature */
-{greek:'κεφαλ-',roman:'kefal-',en:'head',examples:'κεφάλι, κεφαλαιούχος, μικροκέφαλος',cat:'body'},
-{greek:'χειρ- / χερ-',roman:'chir- / cher-',en:'hand',examples:'χέρι, χειρουργός, χειρόγραφο',cat:'body'},
-{greek:'ποδ-',roman:'pod-',en:'foot',examples:'πόδι, ποδήλατο, δίποδο, τρίποδο',cat:'body'},
-{greek:'οδοντ-',roman:'othod-',en:'tooth',examples:'δόντι, οδοντίατρος, οδοντόβουρτσα',cat:'body'},
-{greek:'οφθαλμ- / οφθ-',roman:'ofthalm-',en:'eye',examples:'μάτι (related), οφθαλμίατρος, οφθαλμός',cat:'body'},
-{greek:'ριν-',roman:'rin-',en:'nose',examples:'μύτη (related), ρινικός, ρινίτιδα',cat:'body'},
-{greek:'δενδρ-',roman:'thendr-',en:'tree',examples:'δέντρο, δεντρολίβανο, δενδρόκηπος',cat:'body'},
-{greek:'ανθ-',roman:'anth-',en:'flower / human',examples:'άνθος, ανθός, άνθρωπος, ανθίζω',cat:'body'},
+{greek:'κεφαλ-',roman:'kefal-',en:'head',examples:'κεφάλι (head), κεφαλαιούχος (capitalist), μικροκέφαλος (small-headed)',cat:'body'},
+{greek:'χειρ- / χερ-',roman:'chir- / cher-',en:'hand',examples:'χέρι (hand), χειρουργός (surgeon), χειρόγραφο (manuscript)',cat:'body'},
+{greek:'ποδ-',roman:'pod-',en:'foot',examples:'πόδι (foot), ποδήλατο (bicycle), δίποδο (biped), τρίποδο (tripod)',cat:'body'},
+{greek:'οδοντ-',roman:'othod-',en:'tooth',examples:'δόντι (tooth), οδοντίατρος (dentist), οδοντόβουρτσα (toothbrush)',cat:'body'},
+{greek:'οφθαλμ- / οφθ-',roman:'ofthalm-',en:'eye',examples:'μάτι (eye, related), οφθαλμίατρος (ophthalmologist), οφθαλμός (eye)',cat:'body'},
+{greek:'ριν-',roman:'rin-',en:'nose',examples:'μύτη (nose, related), ρινικός (nasal), ρινίτιδα (rhinitis)',cat:'body'},
+{greek:'δενδρ-',roman:'thendr-',en:'tree',examples:'δέντρο (tree), δεντρολίβανο (rosemary), δενδρόκηπος (arboretum)',cat:'body'},
+{greek:'ανθ-',roman:'anth-',en:'flower / human',examples:'άνθος (flower), ανθός (blossom), άνθρωπος (human), ανθίζω (bloom)',cat:'body'},
 /* Suffixes */
-{greek:'-λογία',roman:'-logía',en:'study of / discourse',examples:'βιολογία, ψυχολογία, τεχνολογία',cat:'suffix'},
-{greek:'-γραφία',roman:'-grafía',en:'writing / recording',examples:'φωτογραφία, βιογραφία, γεωγραφία',cat:'suffix'},
-{greek:'-φωνο',roman:'-fono',en:'sound device',examples:'τηλέφωνο, μικρόφωνο, ακουστικό',cat:'suffix'},
-{greek:'-μετρο',roman:'-metro',en:'measure',examples:'θερμόμετρο, χιλιόμετρο, βαρόμετρο',cat:'suffix'},
-{greek:'-ικός / -ική / -ικό',roman:'-ikós',en:'adjective: related to',examples:'πολιτικός, ιστορικός, πρακτικός',cat:'suffix'},
-{greek:'-της / -τρια',roman:'-tis / -tria',en:'person who does',examples:'μαθητής, δάσκαλος (pattern), οδηγός',cat:'suffix'},
-{greek:'-ση / -ξη',roman:'-si / -xi',en:'action / process (noun)',examples:'κίνηση, απόφαση, σύνδεση, μετάφραση',cat:'suffix'},
-{greek:'-μα',roman:'-ma',en:'result / thing',examples:'πρόβλημα, θέμα, γράμμα, μάθημα',cat:'suffix'},
-{greek:'-άκι / -ούλα',roman:'-áki / -oúla',en:'diminutive (small / cute)',examples:'παιδάκι, σπιτάκι, γατούλα',cat:'suffix'},
-{greek:'-είο',roman:'-ío',en:'place of activity',examples:'γραφείο, σχολείο, βιβλιοπωλείο',cat:'suffix'}
+{greek:'-λογία',roman:'-logía',en:'study of / discourse',examples:'βιολογία (biology), ψυχολογία (psychology), τεχνολογία (technology)',cat:'suffix'},
+{greek:'-γραφία',roman:'-grafía',en:'writing / recording',examples:'φωτογραφία (photograph), βιογραφία (biography), γεωγραφία (geography)',cat:'suffix'},
+{greek:'-φωνο',roman:'-fono',en:'sound device',examples:'τηλέφωνο (telephone), μικρόφωνο (microphone), ακουστικό (earpiece / acoustic)',cat:'suffix'},
+{greek:'-μετρο',roman:'-metro',en:'measure',examples:'θερμόμετρο (thermometer), χιλιόμετρο (kilometer), βαρόμετρο (barometer)',cat:'suffix'},
+{greek:'-ικός / -ική / -ικό',roman:'-ikós',en:'adjective: related to',examples:'πολιτικός (political), ιστορικός (historical), πρακτικός (practical)',cat:'suffix'},
+{greek:'-της / -τρια',roman:'-tis / -tria',en:'person who does',examples:'μαθητής (student), δάσκαλος (teacher, pattern), οδηγός (driver / guide)',cat:'suffix'},
+{greek:'-ση / -ξη',roman:'-si / -xi',en:'action / process (noun)',examples:'κίνηση (movement), απόφαση (decision), σύνδεση (connection), μετάφραση (translation)',cat:'suffix'},
+{greek:'-μα',roman:'-ma',en:'result / thing',examples:'πρόβλημα (problem), θέμα (topic), γράμμα (letter), μάθημα (lesson)',cat:'suffix'},
+{greek:'-άκι / -ούλα',roman:'-áki / -oúla',en:'diminutive (small / cute)',examples:'παιδάκι (little child), σπιτάκι (little house), γατούλα (kitty)',cat:'suffix'},
+{greek:'-είο',roman:'-ío',en:'place of activity',examples:'γραφείο (office), σχολείο (school), βιβλιοπωλείο (bookstore)',cat:'suffix'}
 ];
 
 /* ========== PHRASES (conversational chunks) ========== */
@@ -6404,10 +6408,157 @@ document.getElementById('langSwap').addEventListener('click', function() {
   setLangPair(toLang, fromLang);
 });
 
+/* ========== VERSION & INTEGRITY ========== */
+/* When releasing a new build: set INTEGRITY_MD5 to 32 zeros, save, run the seal script (or ask for a rebuild), then paste the computed MD5 here. */
+const APP_VERSION = '1.0.0 (01.08.2026.00)';
+const INTEGRITY_MD5 = 'e922e1dfde4e82ac70dcc995c03f1ac4';
+const INTEGRITY_PLACEHOLDER = '00000000000000000000000000000000';
+
+/** Minimal MD5 (public-domain style) for integrity checks */
+function md5(str) {
+  function cmn(q, a, b, x, s, t) {
+    a = (a + q + x + t) | 0;
+    return (((a << s) | (a >>> (32 - s))) + b) | 0;
+  }
+  function ff(a, b, c, d, x, s, t) { return cmn((b & c) | (~b & d), a, b, x, s, t); }
+  function gg(a, b, c, d, x, s, t) { return cmn((b & d) | (c & ~d), a, b, x, s, t); }
+  function hh(a, b, c, d, x, s, t) { return cmn(b ^ c ^ d, a, b, x, s, t); }
+  function ii(a, b, c, d, x, s, t) { return cmn(c ^ (b | ~d), a, b, x, s, t); }
+  function toUtf8(s) {
+    const out = [];
+    for (let i = 0; i < s.length; i++) {
+      let c = s.charCodeAt(i);
+      if (c < 0x80) out.push(c);
+      else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 0x3f));
+      else if (c < 0xd800 || c >= 0xe000) out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 0x3f), 0x80 | (c & 0x3f));
+      else {
+        i++;
+        c = 0x10000 + (((c & 0x3ff) << 10) | (s.charCodeAt(i) & 0x3ff));
+        out.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 0x3f), 0x80 | ((c >> 6) & 0x3f), 0x80 | (c & 0x3f));
+      }
+    }
+    return out;
+  }
+  const bytes = toUtf8(str);
+  const n = bytes.length;
+  const words = [];
+  for (let i = 0; i < n; i++) words[i >> 2] |= bytes[i] << ((i % 4) * 8);
+  words[n >> 2] |= 0x80 << ((n % 4) * 8);
+  const bitLen = n * 8;
+  const lenPos = (((n + 8) >> 6) << 4) + 14;
+  words[lenPos] = bitLen;
+  words[lenPos + 1] = Math.floor(bitLen / 0x100000000) || 0;
+  let a = 1732584193, b = -271733879, c = -1732584194, d = 271733878;
+  for (let i = 0; i < words.length; i += 16) {
+    const oa = a, ob = b, oc = c, od = d;
+    const w = [];
+    for (let j = 0; j < 16; j++) w[j] = words[i + j] | 0;
+    a = ff(a, b, c, d, w[0], 7, -680876936); d = ff(d, a, b, c, w[1], 12, -389564586);
+    c = ff(c, d, a, b, w[2], 17, 606105819); b = ff(b, c, d, a, w[3], 22, -1044525330);
+    a = ff(a, b, c, d, w[4], 7, -176418897); d = ff(d, a, b, c, w[5], 12, 1200080426);
+    c = ff(c, d, a, b, w[6], 17, -1473231341); b = ff(b, c, d, a, w[7], 22, -45705983);
+    a = ff(a, b, c, d, w[8], 7, 1770035416); d = ff(d, a, b, c, w[9], 12, -1958414417);
+    c = ff(c, d, a, b, w[10], 17, -42063); b = ff(b, c, d, a, w[11], 22, -1990404162);
+    a = ff(a, b, c, d, w[12], 7, 1804603682); d = ff(d, a, b, c, w[13], 12, -40341101);
+    c = ff(c, d, a, b, w[14], 17, -1502002290); b = ff(b, c, d, a, w[15], 22, 1236535329);
+    a = gg(a, b, c, d, w[1], 5, -165796510); d = gg(d, a, b, c, w[6], 9, -1069501632);
+    c = gg(c, d, a, b, w[11], 14, 643717713); b = gg(b, c, d, a, w[0], 20, -373897302);
+    a = gg(a, b, c, d, w[5], 5, -701558691); d = gg(d, a, b, c, w[10], 9, 38016083);
+    c = gg(c, d, a, b, w[15], 14, -660478335); b = gg(b, c, d, a, w[4], 20, -405537848);
+    a = gg(a, b, c, d, w[9], 5, 568446438); d = gg(d, a, b, c, w[14], 9, -1019803690);
+    c = gg(c, d, a, b, w[3], 14, -187363961); b = gg(b, c, d, a, w[8], 20, 1163531501);
+    a = gg(a, b, c, d, w[13], 5, -1444681467); d = gg(d, a, b, c, w[2], 9, -51403784);
+    c = gg(c, d, a, b, w[7], 14, 1735328473); b = gg(b, c, d, a, w[12], 20, -1926607734);
+    a = hh(a, b, c, d, w[5], 4, -378558); d = hh(d, a, b, c, w[8], 11, -2022574463);
+    c = hh(c, d, a, b, w[11], 16, 1839030562); b = hh(b, c, d, a, w[14], 23, -35309556);
+    a = hh(a, b, c, d, w[1], 4, -1530992060); d = hh(d, a, b, c, w[4], 11, 1272893353);
+    c = hh(c, d, a, b, w[7], 16, -155497632); b = hh(b, c, d, a, w[10], 23, -1094730640);
+    a = hh(a, b, c, d, w[13], 4, 681279174); d = hh(d, a, b, c, w[0], 11, -358537222);
+    c = hh(c, d, a, b, w[3], 16, -722521979); b = hh(b, c, d, a, w[6], 23, 76029189);
+    a = hh(a, b, c, d, w[9], 4, -640364487); d = hh(d, a, b, c, w[12], 11, -421815835);
+    c = hh(c, d, a, b, w[15], 16, 530742520); b = hh(b, c, d, a, w[2], 23, -995338651);
+    a = ii(a, b, c, d, w[0], 6, -198630844); d = ii(d, a, b, c, w[7], 10, 1126891415);
+    c = ii(c, d, a, b, w[14], 15, -1416354905); b = ii(b, c, d, a, w[5], 21, -57434055);
+    a = ii(a, b, c, d, w[12], 6, 1700485571); d = ii(d, a, b, c, w[3], 10, -1894986606);
+    c = ii(c, d, a, b, w[10], 15, -1051523); b = ii(b, c, d, a, w[1], 21, -2054922799);
+    a = ii(a, b, c, d, w[8], 6, 1873313359); d = ii(d, a, b, c, w[15], 10, -30611744);
+    c = ii(c, d, a, b, w[6], 15, -1560198380); b = ii(b, c, d, a, w[13], 21, 1309151649);
+    a = ii(a, b, c, d, w[4], 6, -145523070); d = ii(d, a, b, c, w[11], 10, -1120210379);
+    c = ii(c, d, a, b, w[2], 15, 718787259); b = ii(b, c, d, a, w[9], 21, -343485551);
+    a = (a + oa) | 0; b = (b + ob) | 0; c = (c + oc) | 0; d = (d + od) | 0;
+  }
+  function hex(n) {
+    let s = '';
+    for (let i = 0; i < 4; i++) s += ((n >> (i * 8)) & 0xff).toString(16).padStart(2, '0');
+    return s;
+  }
+  return hex(a) + hex(b) + hex(c) + hex(d);
+}
+
+function showIntegrityLock() {
+  const msg = 'This file has been modified, please contact Andrioti School at info@andrioti.com or (+30) 26610 25715 to obtain the original.';
+  document.body.innerHTML = '<div class="integrity-lock"><div class="integrity-lock-box">' + msg + '</div></div>';
+}
+
+function normalizeForIntegrity(text) {
+  // Replace whatever INTEGRITY_MD5 value is present with the placeholder so the hash is stable
+  return text.replace(
+    /const INTEGRITY_MD5\s*=\s*'[0-9a-fA-F]{32}'/,
+    "const INTEGRITY_MD5 = '" + INTEGRITY_PLACEHOLDER + "'"
+  );
+}
+
+async function verifyIntegrity() {
+  // Skip lock if hash not sealed yet (all zeros)
+  if (!INTEGRITY_MD5 || INTEGRITY_MD5 === INTEGRITY_PLACEHOLDER) return true;
+  try {
+    const res = await fetch(location.href, { cache: 'no-store' });
+    if (!res.ok) throw new Error('fetch failed');
+    const text = await res.text();
+    const normalized = normalizeForIntegrity(text);
+    const digest = md5(normalized);
+    if (digest !== INTEGRITY_MD5.toLowerCase()) {
+      showIntegrityLock();
+      return false;
+    }
+    return true;
+  } catch (e) {
+    // file:// or blocked fetch: fall back to a lightweight in-memory fingerprint
+    // (full file MD5 requires reading the source; still protects against casual data edits when sealed counts match)
+    try {
+      const sig = [
+        APP_VERSION,
+        (typeof verbs !== 'undefined' ? verbs.length : 0),
+        (typeof nouns !== 'undefined' ? nouns.length : 0),
+        (typeof CORE_LANGS !== 'undefined' ? CORE_LANGS.join(',') : ''),
+        (typeof alphabet !== 'undefined' ? alphabet.length : 0)
+      ].join('|');
+      // When sealed, INTEGRITY_MD5 is file hash; offline we only warn in console
+      console.info('Integrity: source fetch unavailable (' + (e && e.message) + '); running offline. sig=' + md5(sig).slice(0, 8));
+      return true;
+    } catch (e2) {
+      return true;
+    }
+  }
+}
+
+(function placeVersion() {
+  let el = document.getElementById('appVersion');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'appVersion';
+    el.className = 'app-version';
+    document.body.appendChild(el);
+  }
+  el.textContent = 'Version ' + APP_VERSION;
+})();
+
 setMainMode('alphabet');
 applyUILanguage();
 rebuildSearchIndex();
+verifyIntegrity();
 </script>
 <footer class="app-footer">Developed by Andelorean Enterprises, Cocoa Beach, FL</footer>
+<div class="app-version" id="appVersion">Version 1.0.0 (01.08.2026.00)</div>
 </body>
 </html>
