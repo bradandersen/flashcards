@@ -4495,7 +4495,7 @@ function makeAdjExample(card) {
   return list[hashPick(m + e, list.length)];
 }
 
-function updateCard() {
+function updateCard(preserveFlip) {
   const card = currentSet[currentIndex];
   if (!card) return;
 
@@ -5115,7 +5115,13 @@ function updateCard() {
   const statsEl = document.getElementById('stats');
   if (statsEl) statsEl.innerHTML = u.cardOf(currentIndex + 1, currentSet.length);
   progressBar.style.width = (currentSet.length ? ((currentIndex + 1) / currentSet.length * 100) : 0) + '%';
-  if (isFlipped) { flashcard.classList.remove('flipped'); isFlipped = false; }
+  if (!preserveFlip && isFlipped) {
+    flashcard.classList.remove('flipped');
+    isFlipped = false;
+  } else if (preserveFlip && isFlipped) {
+    // keep back face visible after content refresh
+    flashcard.classList.add('flipped');
+  }
 }
 
 function filterVerbs() {
@@ -5370,8 +5376,8 @@ document.querySelectorAll('#verbTenseFilters .filter-btn').forEach(btn => {
     document.querySelectorAll('#verbTenseFilters .filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     verbTenseFilter = btn.dataset.vtense;
-    // re-render current card so the back shows the right tense(s)
-    updateCard();
+    // re-render current card; keep front/back as the user left it
+    updateCard(true);
   });
 });
 
@@ -6560,8 +6566,8 @@ document.getElementById('langSwap').addEventListener('click', function() {
 
 /* ========== VERSION & INTEGRITY ========== */
 /* When releasing a new build: set INTEGRITY_MD5 to 32 zeros, save, run the seal script (or ask for a rebuild), then paste the computed MD5 here. */
-const APP_VERSION = '1.0.3 (21.08.2026.00)';
-const INTEGRITY_MD5 = '5ba149e0789770e50872fc0b79ac3dff';
+const APP_VERSION = '1.0.4 (21.08.2026.01)';
+const INTEGRITY_MD5 = 'af67220febe1c3d71a557279b3fe5407';
 const INTEGRITY_PLACEHOLDER = '00000000000000000000000000000000';
 
 /** Minimal MD5 (public-domain style) for integrity checks */
@@ -6709,6 +6715,6 @@ rebuildSearchIndex();
 verifyIntegrity();
 </script>
 <footer class="app-footer">Developed by Andelorean Enterprises, Cocoa Beach, FL</footer>
-<div class="app-version" id="appVersion">Version 1.0.3 (21.08.2026.00)</div>
+<div class="app-version" id="appVersion">Version 1.0.4 (21.08.2026.01)</div>
 </body>
 </html>
