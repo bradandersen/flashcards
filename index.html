@@ -4299,6 +4299,108 @@ function hashPick(str, n) {
   return Math.abs(h) % n;
 }
 
+/** Derive nominative + accusative plural (with articles) from a noun card. Optional overrides: pl, plAcc, plR, plAccR */
+function nounPlural(card) {
+  if (card.pl) {
+    return {
+      nom: card.pl,
+      acc: card.plAcc || card.pl,
+      nomR: card.plR || '',
+      accR: card.plAccR || card.plR || ''
+    };
+  }
+  const g = card.gender || 'm';
+  const full = (card.greek || '').trim();
+  const parts = full.split(/\s+/);
+  const art = parts.length > 1 ? parts[0] : '';
+  let stem = parts.length > 1 ? parts.slice(1).join(' ') : full;
+  // strip stress for ending checks but keep original stem for display base
+  const low = stem.toLowerCase();
+  let nomStem = stem, accStem = stem;
+  // --- masculine ---
+  if (g === 'm') {
+    if (/ός$/.test(low) || /ος$/.test(low)) {
+      nomStem = stem.replace(/[όο]ς$/i, (m) => m[0] === 'ό' || m[0] === 'Ό' ? 'οί' : 'οι');
+      // better: φίλος → φίλοι
+      nomStem = stem.replace(/ός$/i, 'οί').replace(/ος$/i, 'οι');
+      accStem = stem.replace(/ός$/i, 'ούς').replace(/ος$/i, 'ους');
+    } else if (/ής$/.test(low) || /ης$/.test(low)) {
+      nomStem = stem.replace(/ής$/i, 'ές').replace(/ης$/i, 'ες');
+      accStem = nomStem;
+    } else if (/άς$/.test(low) || /ας$/.test(low)) {
+      // άντρας → άντρες; πατέρας → πατέρες
+      nomStem = stem.replace(/άς$/i, 'άδες').replace(/ας$/i, 'ες');
+      // special common: άντρας/άνδρας → άντρες
+      if (/άντρ?ας$/i.test(stem)) nomStem = stem.replace(/άντρ?ας$/i, 'άντρες');
+      if (/πατέρας$/i.test(stem)) nomStem = 'πατέρες';
+      if (/άνθρωπος$/i.test(stem)) { nomStem = 'άνθρωποι'; accStem = 'ανθρώπους'; }
+      accStem = nomStem;
+    } else if (/έας$/.test(low)) {
+      nomStem = stem.replace(/έας$/i, 'είς');
+      accStem = nomStem;
+    } else if (/ος$/.test(low) === false && /ς$/.test(low)) {
+      nomStem = stem.replace(/ς$/i, 'δες');
+      accStem = nomStem;
+    }
+    return {
+      nom: 'οι ' + nomStem,
+      acc: 'τους ' + accStem,
+      nomR: '',
+      accR: ''
+    };
+  }
+  // --- feminine ---
+  if (g === 'f') {
+    if (/η$/.test(low) || /ή$/.test(low)) {
+      // φίλη → φίλες; πόλη / λέξη / δύναμη → -εις
+      if (/[ξψσζ]η$/i.test(low) || /πόλη$|δύναμη$|κυβέρνηση$|απόφαση$|σκέψη$|γνώση$/i.test(stem)) {
+        nomStem = stem.replace(/η$/i, 'εις').replace(/ή$/i, 'είς');
+      } else {
+        nomStem = stem.replace(/η$/i, 'ες').replace(/ή$/i, 'ές');
+      }
+      accStem = nomStem;
+    } else if (/α$/.test(low) || /ά$/.test(low)) {
+      nomStem = stem.replace(/α$/i, 'ες').replace(/ά$/i, 'ές');
+      accStem = nomStem;
+    } else if (/ος$/.test(low) || /ός$/.test(low)) {
+      nomStem = stem.replace(/ός$/i, 'οί').replace(/ος$/i, 'οι');
+      accStem = stem.replace(/ός$/i, 'ούς').replace(/ος$/i, 'ους');
+    } else if (/ου$/.test(low)) {
+      nomStem = stem + 'δες';
+      accStem = nomStem;
+    }
+    return {
+      nom: 'οι ' + nomStem,
+      acc: 'τις ' + accStem,
+      nomR: '',
+      accR: ''
+    };
+  }
+  // --- neuter ---
+  if (g === 'n') {
+    if (/ι$/.test(low) || /ί$/.test(low)) {
+      nomStem = stem.replace(/ι$/i, 'ια').replace(/ί$/i, 'ιά');
+      // παιδί → παιδιά
+      if (/παιδί$/i.test(stem)) nomStem = 'παιδιά';
+    } else if (/ο$/.test(low) || /ό$/.test(low)) {
+      nomStem = stem.replace(/ο$/i, 'α').replace(/ό$/i, 'ά');
+    } else if (/μα$/.test(low)) {
+      nomStem = stem.replace(/μα$/i, 'ματα');
+    } else if (/ος$/.test(low) || /ός$/.test(low)) {
+      nomStem = stem.replace(/ος$/i, 'η').replace(/ός$/i, 'ή');
+    } else if (/ας$/.test(low) || /ας$/.test(low)) {
+      nomStem = stem.replace(/ας$/i, 'ατα');
+    }
+    return {
+      nom: 'τα ' + nomStem,
+      acc: 'τα ' + nomStem,
+      nomR: '',
+      accR: ''
+    };
+  }
+  return { nom: '', acc: '', nomR: '', accR: '' };
+}
+
 function makeNounExample(card) {
   const g = card.greek, a = card.acc, ar = card.accR, r = card.roman, e = card.en, c = card.cat || '';
   const templates = {
@@ -4854,6 +4956,10 @@ function updateCard() {
     const u = t();
     frontMain.className = 'greek-word';
     const ex = card.exG ? {g:card.exG,r:card.exR,e:card.exE} : makeNounExample(card);
+    const pl = nounPlural(card);
+    const plBlock = (pl.nom || pl.acc) ? `
+          <div style="margin-top:6px"><strong>${u.plural || 'Plural:'}</strong> ${pl.nom}${pl.acc && pl.acc !== pl.nom ? ' · ' + pl.acc : ''}</div>
+          ${pl.nomR || pl.accR ? `<div class="roman-word">${[pl.nomR, pl.accR].filter(Boolean).join(' · ')}</div>` : ''}` : '';
     if (isElEn()) {
       frontMain.textContent = card.en;
       frontSub.textContent = '';
@@ -4863,6 +4969,7 @@ function updateCard() {
         <div style="margin-top:10px;font-size:.95rem">
           <div><strong>${u.accusative}</strong> ${card.acc}</div>
           <div class="roman-word">${card.accR || ''}</div>
+          ${plBlock}
         </div>
         <div class="example-block">
           <div class="ex-e">${ex.e}</div>
@@ -4878,6 +4985,7 @@ function updateCard() {
         <div style="margin-top:10px;font-size:.95rem">
           <div><strong>${u.accusative}</strong> ${card.acc}</div>
           <div class="roman-word">${card.accR}</div>
+          ${plBlock}
         </div>
         <div class="example-block">
           <div class="ex-g">${ex.g}</div>
@@ -6064,6 +6172,7 @@ const UI = {
     tapEx: 'tap for example',
     examples: 'Examples:',
     accusative: 'Accusative:',
+    plural: 'Plural:',
     digraphsH2: 'Common Digraphs & Pronunciation',
     sound: 'Sound:',
     like: 'Like:',
@@ -6099,6 +6208,7 @@ const UI = {
     tapEx: 'πάτα για παράδειγμα',
     examples: 'Παραδείγματα:',
     accusative: 'Αιτιατική:',
+    plural: 'Πληθυντικός:',
     digraphsH2: 'Δίψηφα & Προφορά',
     sound: 'Ήχος:',
     like: 'Όπως:',
@@ -6134,6 +6244,7 @@ const UI = {
     tapEx: 'toca para ejemplo',
     examples: 'Ejemplos:',
     accusative: 'Acusativo:',
+    plural: 'Plural:',
     digraphsH2: 'Dígrafos y pronunciación',
     sound: 'Sonido:',
     like: 'Como:',
@@ -6169,6 +6280,7 @@ const UI = {
     tapEx: 'appuyer pour exemple',
     examples: 'Exemples :',
     accusative: 'Accusatif :',
+    plural: 'Pluriel :',
     digraphsH2: 'Digraphes et prononciation',
     sound: 'Son :',
     like: 'Comme :',
@@ -6204,6 +6316,7 @@ const UI = {
     tapEx: 'tocca per esempio',
     examples: 'Esempi:',
     accusative: 'Accusativo:',
+    plural: 'Plurale:',
     digraphsH2: 'Digrafi e pronuncia',
     sound: 'Suono:',
     like: 'Come:',
@@ -6239,6 +6352,7 @@ const UI = {
     tapEx: 'tippen für Beispiel',
     examples: 'Beispiele:',
     accusative: 'Akkusativ:',
+    plural: 'Plural:',
     digraphsH2: 'Digraphe & Aussprache',
     sound: 'Laut:',
     like: 'Wie:',
@@ -6274,6 +6388,7 @@ const UI = {
     tapEx: 'tik voor voorbeeld',
     examples: 'Voorbeelden:',
     accusative: 'Accusatief:',
+    plural: 'Meervoud:',
     digraphsH2: 'Digrafen en uitspraak',
     sound: 'Klank:',
     like: 'Zoals:',
@@ -6309,6 +6424,7 @@ const UI = {
     tapEx: 'toque para exemplo',
     examples: 'Exemplos:',
     accusative: 'Acusativo:',
+    plural: 'Plural:',
     digraphsH2: 'Dígrafos e pronúncia',
     sound: 'Som:',
     like: 'Como:',
@@ -6444,8 +6560,8 @@ document.getElementById('langSwap').addEventListener('click', function() {
 
 /* ========== VERSION & INTEGRITY ========== */
 /* When releasing a new build: set INTEGRITY_MD5 to 32 zeros, save, run the seal script (or ask for a rebuild), then paste the computed MD5 here. */
-const APP_VERSION = '1.0.2 (06.08.2026.01)';
-const INTEGRITY_MD5 = '9e423cf6eb392866338d3c88d4687f31';
+const APP_VERSION = '1.0.3 (21.08.2026.00)';
+const INTEGRITY_MD5 = '5ba149e0789770e50872fc0b79ac3dff';
 const INTEGRITY_PLACEHOLDER = '00000000000000000000000000000000';
 
 /** Minimal MD5 (public-domain style) for integrity checks */
@@ -6593,6 +6709,6 @@ rebuildSearchIndex();
 verifyIntegrity();
 </script>
 <footer class="app-footer">Developed by Andelorean Enterprises, Cocoa Beach, FL</footer>
-<div class="app-version" id="appVersion">Version 1.0.2 (06.08.2026.01)</div>
+<div class="app-version" id="appVersion">Version 1.0.3 (21.08.2026.00)</div>
 </body>
 </html>
