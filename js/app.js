@@ -2427,10 +2427,11 @@ document.getElementById('langSwap').addEventListener('click', function() {
 });
 
 /* ========== VERSION & INTEGRITY ========== */
-/* When releasing a new build: set INTEGRITY_MD5 to 32 zeros, save, run the seal script (or ask for a rebuild), then paste the computed MD5 here. */
+/* When releasing: run `python3 tools/seal.py` (hashes index.html + css + js with this constant stubbed to zeros). */
 const APP_VERSION = '1.0.5 (27.08.2026.00)';
 const INTEGRITY_PLACEHOLDER = '00000000000000000000000000000000';
-const INTEGRITY_MD5 = INTEGRITY_PLACEHOLDER; // unsealed while source is split across files
+const INTEGRITY_MD5 = '8844ed661295672b8e437206beae4b5d';
+const INTEGRITY_ASSETS = ['css/app.css', 'js/data.js', 'js/app.js', 'js/tests.js'];
 
 /** Minimal MD5 (public-domain style) for integrity checks */
 function md5(str) {
@@ -2518,31 +2519,35 @@ function showIntegrityLock() {
   document.body.innerHTML = '<div class="integrity-lock"><div class="integrity-lock-box">This file has been modified. Get the original from <a href="' + repo + '" target="_blank" rel="noopener">' + repo + '</a>.</div></div>';
 }
 
+function normalizeNewlines(text) {
+  return String(text).replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+}
+
 function normalizeForIntegrity(text) {
-  // Replace whatever INTEGRITY_MD5 value is present with the placeholder so the hash is stable
-  return text.replace(
+  return normalizeNewlines(text).replace(
     /const INTEGRITY_MD5\s*=\s*'[0-9a-fA-F]{32}'/,
     "const INTEGRITY_MD5 = '" + INTEGRITY_PLACEHOLDER + "'"
   );
 }
 
 async function verifyIntegrity() {
-  // Skip lock if hash not sealed yet (all zeros)
   if (!INTEGRITY_MD5 || INTEGRITY_MD5 === INTEGRITY_PLACEHOLDER) return true;
   try {
-    const res = await fetch(location.href, { cache: 'no-store' });
-    if (!res.ok) throw new Error('fetch failed');
-    const text = await res.text();
-    const normalized = normalizeForIntegrity(text);
-    const digest = md5(normalized);
+    const htmlRes = await fetch(location.href, { cache: 'no-store' });
+    if (!htmlRes.ok) throw new Error('fetch failed');
+    const parts = ['FILE:index.html\n' + await htmlRes.text()];
+    for (const path of INTEGRITY_ASSETS) {
+      const res = await fetch(new URL(path, location.href), { cache: 'no-store' });
+      if (!res.ok) throw new Error('fetch failed ' + path);
+      parts.push('FILE:' + path + '\n' + await res.text());
+    }
+    const digest = md5(normalizeForIntegrity(parts.join('\n')));
     if (digest !== INTEGRITY_MD5.toLowerCase()) {
       showIntegrityLock();
       return false;
     }
     return true;
   } catch (e) {
-    // file:// or blocked fetch: fall back to a lightweight in-memory fingerprint
-    // (full file MD5 requires reading the source; still protects against casual data edits when sealed counts match)
     try {
       const sig = [
         APP_VERSION,
@@ -2551,7 +2556,6 @@ async function verifyIntegrity() {
         (typeof CORE_LANGS !== 'undefined' ? CORE_LANGS.join(',') : ''),
         (typeof alphabet !== 'undefined' ? alphabet.length : 0)
       ].join('|');
-      // When sealed, INTEGRITY_MD5 is file hash; offline we only warn in console
       console.info('Integrity: source fetch unavailable (' + (e && e.message) + '); running offline. sig=' + md5(sig).slice(0, 8));
       return true;
     } catch (e2) {

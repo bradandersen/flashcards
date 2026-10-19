@@ -63,9 +63,13 @@ Greek · English · Spanish · French · Italian · German · Dutch · Portugues
 
 ## File integrity
 
-The original single-file build could seal an MD5 of itself and lock the UI if the file was edited.
+The app seals an MD5 of `index.html`, `css/app.css`, `js/data.js`, `js/app.js`, and `js/tests.js`. After you change those files, reseal:
 
-**Source in this repo is unsealed** so we can expand it. `INTEGRITY_MD5` is the placeholder (all zeros), so the lock does not fire. If you pack a distribution file later, you can reseal that copy. A sealed copy that fails the check points people to [github.com/bradandersen/flashcards](https://github.com/bradandersen/flashcards).
+```bash
+python3 tools/seal.py
+```
+
+If a hosted copy fails the check, the UI locks and points to [github.com/bradandersen/flashcards](https://github.com/bradandersen/flashcards). Opening as `file://` skips the full check.
 
 ---
 
