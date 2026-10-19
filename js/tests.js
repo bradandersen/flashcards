@@ -29,6 +29,15 @@ function saveProgress(data) {
   localStorage.setItem(TEST_STORE_KEY, JSON.stringify(data));
 }
 
+function currentTestPair() {
+  return fromLang + '-' + toLang;
+}
+
+function historyForPair(data) {
+  const pair = currentTestPair();
+  return (data.history || []).filter(h => h.pair === pair);
+}
+
 function recordTest(entry) {
   const data = loadProgress();
   data.history.unshift(entry);
@@ -126,7 +135,7 @@ function showTestHub() {
   if (!panel) return;
   const q = quizCopy();
   const data = loadProgress();
-  const hist = data.history || [];
+  const hist = historyForPair(data);
   const totalQ = hist.reduce((s, h) => s + (h.total || 0), 0);
   const totalC = hist.reduce((s, h) => s + (h.correct || 0), 0);
   const overall = totalQ ? Math.round((totalC / totalQ) * 100) : 0;
@@ -188,7 +197,10 @@ function showTestHub() {
   if (clearBtn) {
     clearBtn.addEventListener('click', () => {
       if (!confirm(q.clear + '?')) return;
-      saveProgress({ history: [] });
+      const all = loadProgress();
+      const pair = currentTestPair();
+      all.history = (all.history || []).filter(h => h.pair !== pair);
+      saveProgress(all);
       showTestHub();
     });
   }

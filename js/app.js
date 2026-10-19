@@ -136,6 +136,137 @@ function nounPlural(card) {
   return { nom: '', acc: '', nomR: '', accR: '' };
 }
 
+const DE_WEAK_NOUNS = new Set(['Name','Mensch','Nachbar','Student','Polizist','Kollege','Hase','Bär','Herr']);
+
+function deNomArt(g) {
+  if (g === 'm') return 'der';
+  if (g === 'f' || g === 'p') return 'die';
+  if (g === 'n') return 'das';
+  return '';
+}
+
+function deAccArt(g) {
+  if (g === 'm') return 'den';
+  if (g === 'f' || g === 'p') return 'die';
+  if (g === 'n') return 'das';
+  return '';
+}
+
+function deGenderLabel(g) {
+  if (g === 'm') return 'masculine';
+  if (g === 'f') return 'feminine';
+  if (g === 'n') return 'neuter';
+  if (g === 'p') return 'plural';
+  return '';
+}
+
+function deAccNounForm(card) {
+  const n = card.de || '';
+  if (card.g === 'm' && (card.weak || DE_WEAK_NOUNS.has(n))) {
+    if (/e$/.test(n)) return n + 'n';
+    if (/n$/.test(n)) return n;
+    return n + 'en';
+  }
+  return n;
+}
+
+function deAccPhrase(card) {
+  const art = deAccArt(card.g);
+  const noun = deAccNounForm(card);
+  return art ? (art + ' ' + noun) : noun;
+}
+
+function deNomPhrase(card) {
+  const art = deNomArt(card.g);
+  const noun = card.de || '';
+  return art ? (art + ' ' + noun) : noun;
+}
+
+function dePlPhrase(card) {
+  if (!card.pl || card.pl === '—' || card.g === 'p') return '';
+  return 'die ' + card.pl;
+}
+
+function makeDeNounExample(card) {
+  if (card.exD && card.exE) return { g: card.exD, e: card.exE };
+  const acc = deAccPhrase(card);
+  const nom = deNomPhrase(card);
+  const e = card.en || '';
+  const c = card.cat || '';
+  const templates = {
+    food: [
+      { g: `Ich kaufe ${acc} im Supermarkt.`, e: `I buy ${e} at the supermarket.` },
+      { g: `Heute esse ich ${acc}.`, e: `Today I eat ${e}.` }
+    ],
+    kitchen: [
+      { g: `Ich brauche ${acc} in der Küche.`, e: `I need ${e} in the kitchen.` },
+      { g: `Wo ist ${nom}?`, e: `Where is the ${e}?` }
+    ],
+    family: [
+      { g: `Ich rufe ${acc} an.`, e: `I call ${e}.` },
+      { g: `${nom} wohnt in Berlin.`, e: `${e} lives in Berlin.` }
+    ],
+    places: [
+      { g: `Ich suche ${acc}.`, e: `I am looking for the ${e}.` },
+      { g: `${nom} ist nicht weit.`, e: `The ${e} is not far.` }
+    ],
+    clothing: [
+      { g: `Ich trage ${acc} heute.`, e: `I am wearing ${e} today.` },
+      { g: `Wo sind ${acc}?`, e: `Where is/are ${e}?` }
+    ],
+    household: [
+      { g: `${nom} ist im Haus.`, e: `The ${e} is in the house.` },
+      { g: `Ich putze ${acc}.`, e: `I clean the ${e}.` }
+    ],
+    garden: [
+      { g: `Ich gieße ${acc} im Garten.`, e: `I water the ${e} in the garden.` }
+    ],
+    animals: [
+      { g: `Ich sehe ${acc} im Park.`, e: `I see ${e} in the park.` }
+    ],
+    body: [
+      { g: `${nom} tut weh.`, e: `My ${e} hurts.` },
+      { g: `Ich wasche ${acc}.`, e: `I wash ${e}.` }
+    ],
+    work: [
+      { g: `Ich brauche ${acc} für die Arbeit.`, e: `I need ${e} for work.` },
+      { g: `${nom} ist wichtig.`, e: `The ${e} is important.` }
+    ],
+    island: [
+      { g: `Ich packe ${acc} für die Reise.`, e: `I pack ${e} for the trip.` }
+    ],
+    nature: [
+      { g: `Ich sehe ${acc} vom Fenster.`, e: `I see the ${e} from the window.` }
+    ],
+    things: [
+      { g: `Ich suche ${acc}.`, e: `I am looking for ${e}.` },
+      { g: `${nom} liegt auf dem Tisch.`, e: `The ${e} is on the table.` }
+    ]
+  };
+  const list = templates[c] || templates.things;
+  return list[hashPick(nom + e, list.length)];
+}
+
+function makeDeAdjExample(card) {
+  const w = card.de, e = card.en, c = card.cat || '';
+  const templates = {
+    color: [{ g: `Das Auto ist ${w}.`, e: `The car is ${e}.` }],
+    size: [{ g: `Das Haus ist ${w}.`, e: `The house is ${e}.` }],
+    feeling: [{ g: `Ich bin heute ${w}.`, e: `I am ${e} today.` }],
+    quantity: [{ g: `Das ist ${w}.`, e: `That is ${e}.` }],
+    quality: [{ g: `Der Kaffee ist ${w}.`, e: `The coffee is ${e}.` }]
+  };
+  const list = templates[c] || templates.quality;
+  return list[hashPick(w + e, list.length)];
+}
+
+function deVerbExample(card, tenseKey) {
+  const bank = (typeof deVerbExamples !== 'undefined') ? deVerbExamples[card.lemma] : null;
+  const hit = bank && (bank[tenseKey] || bank.present);
+  if (hit && hit.g) return hit;
+  return null;
+}
+
 function makeNounExample(card) {
   const g = card.greek, a = card.acc, ar = card.accR, r = card.roman, e = card.en, c = card.cat || '';
   const templates = {
@@ -304,30 +435,80 @@ function updateCard(preserveFlip) {
       let back = showCore
         ? `<div class="english-word">${card.en}</div><div class="class-label">${card.klass||''}</div>`
         : `<div class="greek-word">${card.lemma}</div><div class="class-label">${card.klass||''}</div>`;
-      back += `<div style="margin-top:10px;font-size:.9rem;opacity:.85">${tenseLabel}</div>
+      const vex = (cLang === 'de') ? deVerbExample(card, tenseKey) : null;
+      back += `<div class="tense-title${vex ? ' tense-clickable' : ''}" id="tenseTitleBtn">${tenseLabel}${vex ? ' · ' + u.tapEx : ''}</div>
         <table style="margin:6px auto;font-size:.95rem;text-align:left">${rows}</table>`;
+      if (vex && vex.g) {
+        back += `<button type="button" class="example-btn" id="showExampleBtn">${u.example} (${tenseLabel})</button>`;
+      }
       backContent.innerHTML = back;
+      const openVex = () => {
+        if (!vex || !vex.g) return;
+        if (showCore) openExampleModal(vex.g, '', vex.e);
+        else openExampleModal(vex.e, '', vex.g);
+      };
+      const btn = document.getElementById('showExampleBtn');
+      if (btn) btn.addEventListener('click', (e) => { e.stopPropagation(); openVex(); });
+      const tBtn = document.getElementById('tenseTitleBtn');
+      if (tBtn && vex) tBtn.addEventListener('click', (e) => { e.stopPropagation(); openVex(); });
     } else if (mainMode === 'nouns') {
       frontMain.className = 'greek-word';
       const word = card[wk] || card.es || card.it || '';
+      const richDe = cLang === 'de';
+      const art = richDe ? deNomArt(card.g) : '';
+      const gender = deGenderLabel(card.g);
       if (showCore) {
-        frontMain.textContent = word;
-        frontSub.textContent = card.g === 'm' ? 'm.' : (card.g === 'f' ? 'f.' : (card.g === 'n' ? 'n.' : ''));
+        frontMain.textContent = richDe ? deNomPhrase(card) : word;
+        frontSub.textContent = card.g === 'm' ? 'm.' : (card.g === 'f' ? 'f.' : (card.g === 'n' ? 'n.' : (card.g === 'p' ? 'pl.' : '')));
       } else {
         frontMain.textContent = card.en;
-        frontSub.textContent = '';
+        frontSub.textContent = art ? (art + ' · ' + (card.g || '')) : '';
       }
-      backContent.innerHTML = showCore
-        ? `<div class="english-word">${card.en}</div><div class="roman-word">${card.g==='m'?'masculine':(card.g==='f'?'feminine':(card.g==='n'?'neuter':''))}</div>`
-        : `<div class="greek-word">${word}</div><div class="roman-word">${card.g||''}</div>`;
+      if (richDe) {
+        const pl = dePlPhrase(card);
+        const ex = makeDeNounExample(card);
+        const acc = deAccPhrase(card);
+        const deHead = deNomPhrase(card);
+        backContent.innerHTML = showCore
+          ? `<div class="english-word">${card.en}</div>
+             <div class="roman-word">${gender}</div>
+             <div style="margin-top:10px;font-size:.95rem">
+               <div><strong>${u.accusative}</strong> ${acc}</div>
+               ${pl ? `<div style="margin-top:6px"><strong>${u.plural}</strong> ${pl}</div>` : ''}
+             </div>
+             <div class="example-block">
+               <div class="ex-g">${ex.g}</div>
+               <div class="ex-e">${ex.e}</div>
+             </div>`
+          : `<div class="greek-word">${deHead}</div>
+             <div class="roman-word">${gender}${pl ? ' · ' + pl : ''}</div>
+             <div style="margin-top:10px;font-size:.95rem">
+               <div><strong>${u.accusative}</strong> ${acc}</div>
+             </div>
+             <div class="example-block">
+               <div class="ex-e">${ex.e}</div>
+               <div class="ex-g">${ex.g}</div>
+             </div>`;
+      } else {
+        backContent.innerHTML = showCore
+          ? `<div class="english-word">${card.en}</div><div class="roman-word">${gender}</div>`
+          : `<div class="greek-word">${word}</div><div class="roman-word">${card.g||''}</div>`;
+      }
     } else if (mainMode === 'adjectives' || mainMode === 'adverbs' || mainMode === 'calendar' || mainMode === 'phrases') {
       frontMain.className = 'greek-word';
       const word = card[wk] || card.es || card.it || '';
       if (showCore) { frontMain.textContent = word; frontSub.textContent = card.cat || ''; }
       else { frontMain.textContent = card.en; frontSub.textContent = card.cat || ''; }
+      let extra = '';
+      if (cLang === 'de' && mainMode === 'adjectives') {
+        const ex = makeDeAdjExample(card);
+        extra = showCore
+          ? `<div class="example-block"><div class="ex-g">${ex.g}</div><div class="ex-e">${ex.e}</div></div>`
+          : `<div class="example-block"><div class="ex-e">${ex.e}</div><div class="ex-g">${ex.g}</div></div>`;
+      }
       backContent.innerHTML = showCore
-        ? `<div class="english-word">${card.en}</div>`
-        : `<div class="greek-word">${word}</div>`;
+        ? `<div class="english-word">${card.en}</div>${extra}`
+        : `<div class="greek-word">${word}</div>${extra}`;
     } else {
       frontMain.className = 'greek-word';
       frontMain.textContent = '—';
@@ -366,15 +547,41 @@ function updateCard(preserveFlip) {
       const head = frontIsCore
         ? `<div class="greek-word">${g?g.lemma:''}</div><div class="roman-word">${(g&&g.en)||card.en||''}</div>`
         : `<div class="greek-word">${c?c.lemma:''}</div><div class="roman-word">${(c&&c.en)||card.en||''}</div>`;
-      backContent.innerHTML = head + `<div style="margin-top:8px;font-size:.85rem;opacity:.85">${tenseLabel}</div>
+      const vex = (cLang === 'de' && c) ? deVerbExample(c, tenseKeyC) : null;
+      let vhtml = head + `<div class="tense-title${vex ? ' tense-clickable' : ''}" id="tenseTitleBtn">${tenseLabel}${vex ? ' · ' + u.tapEx : ''}</div>
         <table style="margin:6px auto;font-size:.9rem;text-align:left">${rows}</table>`;
+      if (vex && vex.g) vhtml += `<button type="button" class="example-btn" id="showExampleBtn">${u.example} (${tenseLabel})</button>`;
+      backContent.innerHTML = vhtml;
+      const openVex = () => {
+        if (!vex || !vex.g) return;
+        openExampleModal(vex.g, '', vex.e);
+      };
+      const btn = document.getElementById('showExampleBtn');
+      if (btn) btn.addEventListener('click', (e) => { e.stopPropagation(); openVex(); });
+      const tBtn = document.getElementById('tenseTitleBtn');
+      if (tBtn && vex) tBtn.addEventListener('click', (e) => { e.stopPropagation(); openVex(); });
     } else if (mainMode === 'nouns') {
       frontMain.className = 'greek-word';
-      if (frontIsCore) { frontMain.textContent = card[wk] || card.coreWord || ''; frontSub.textContent = card.g==='m'?'m.':(card.g==='f'?'f.':''); }
-      else { frontMain.textContent = card.greek; frontSub.textContent = card.roman || ''; }
+      const richDe = cLang === 'de' && card.de;
+      if (frontIsCore) {
+        frontMain.textContent = richDe ? deNomPhrase(card) : (card[wk] || card.coreWord || '');
+        frontSub.textContent = card.g==='m'?'m.':(card.g==='f'?'f.':(card.g==='n'?'n.':(card.g==='p'?'pl.':'')));
+      } else {
+        frontMain.textContent = card.greek;
+        frontSub.textContent = card.roman || '';
+      }
+      const pl = richDe ? dePlPhrase(card) : '';
+      const acc = richDe ? deAccPhrase(card) : '';
+      const ex = richDe ? makeDeNounExample(card) : null;
+      const deBits = richDe ? `
+        <div style="margin-top:8px;font-size:.95rem">
+          ${acc ? `<div><strong>${u.accusative}</strong> ${acc}</div>` : ''}
+          ${pl ? `<div style="margin-top:4px"><strong>${u.plural}</strong> ${pl}</div>` : ''}
+        </div>
+        <div class="example-block"><div class="ex-g">${ex.g}</div><div class="ex-e">${ex.e}</div></div>` : '';
       backContent.innerHTML = frontIsCore
-        ? `<div class="greek-word">${card.greek}</div><div class="roman-word">${card.roman||''}</div><div class="english-word" style="opacity:.7;font-size:.9rem">${card.en||''}</div>`
-        : `<div class="greek-word">${card[wk]||''}</div><div class="english-word" style="opacity:.7;font-size:.9rem">${card.en||''}</div>`;
+        ? `<div class="greek-word">${card.greek}</div><div class="roman-word">${card.roman||''}</div><div class="english-word" style="opacity:.7;font-size:.9rem">${card.en||''}</div>${deBits}`
+        : `<div class="greek-word">${richDe ? deNomPhrase(card) : (card[wk]||'')}</div><div class="english-word" style="opacity:.7;font-size:.9rem">${card.en||''}</div>${deBits}`;
     } else if (mainMode === 'adjectives' || mainMode === 'adverbs' || mainMode === 'calendar' || mainMode === 'phrases') {
       frontMain.className = 'greek-word';
       if (frontIsCore) { frontMain.textContent = card[wk] || ''; frontSub.textContent = card.cat || ''; }
@@ -1739,7 +1946,7 @@ function getElCoreNouns(lang) {
   const out = [];
   nouns.forEach(g => {
     const k = normKey(g.en);
-    if (map[k]) out.push({ greek:g.greek, roman:g.roman, en:g.en, cat:g.cat||map[k].cat, g:map[k].g||g.gender, [wk]:map[k][wk], coreWord:map[k][wk] });
+    if (map[k]) out.push({ greek:g.greek, roman:g.roman, en:g.en, cat:g.cat||map[k].cat, g:map[k].g||g.gender, [wk]:map[k][wk], coreWord:map[k][wk], pl:map[k].pl });
   });
   return elCoreCache[key] = out;
 }
@@ -2430,7 +2637,7 @@ document.getElementById('langSwap').addEventListener('click', function() {
 /* When releasing: run `python3 tools/seal.py` (hashes index.html + css + js with this constant stubbed to zeros). */
 const APP_VERSION = '1.0.5 (27.08.2026.00)';
 const INTEGRITY_PLACEHOLDER = '00000000000000000000000000000000';
-const INTEGRITY_MD5 = '8844ed661295672b8e437206beae4b5d';
+const INTEGRITY_MD5 = '54ecf604142f4efb286afd79a90eb378';
 const INTEGRITY_ASSETS = ['css/app.css', 'js/data.js', 'js/app.js', 'js/tests.js'];
 
 /** Minimal MD5 (public-domain style) for integrity checks */
