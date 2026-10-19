@@ -1,20 +1,59 @@
 # Flashcards — Multi-Language Vocabulary Trainer
 
-A single-file, offline flashcard app for learning vocabulary across several European languages. Built for **Andrioti School** (Corfu, Greece).
+A static, offline flashcard app for learning vocabulary across several European languages. Built for **Andrioti School** (Corfu, Greece).
 
-**Version:** 1.0.1 (06.08.2026.00)
+**Version:** 1.0.5 (27.08.2026.00)
+
+Greek ↔ English is the richest pair (conjugations, gender, roots, phrases). Spanish, French, Italian, German, Dutch, and Portuguese have core survival sets plus alphabets and pronunciation.
+
+---
+
+## Quick start
+
+Serve the folder (scripts do not load from `file://` in some browsers):
+
+```bash
+python3 -m http.server 8080
+```
+
+Then open http://localhost:8080
+
+Select **From** and **To**, pick a category, and flip cards (click / Space). ← → navigate, **S** shuffles.
+
+> **iPhone / iPad:** Opening a local `.html` file is restricted. Host the folder (GitHub Pages, Netlify, Cloudflare Pages) and open the HTTPS URL.
+
+---
+
+## Project layout
+
+The original app was a single ~600KB `index.html`. Source is now split so vocabulary and logic can grow independently:
+
+| Path | What lives here |
+|------|-----------------|
+| `index.html` | Markup: header, language pair, tabs, filters, card chrome |
+| `css/app.css` | Layout and card styles |
+| `js/data.js` | All word lists, alphabets, digraphs, `CORE` registry |
+| `js/app.js` | Filtering, rendering, search, i18n, zoom, integrity helpers |
+| `tools/pack.py` | Rebuild a single-file copy under `dist/` for sealed distribution |
+
+To add words, edit the relevant array in `js/data.js` (for example `nouns`, `esVerbs`, `frPhrases`). To change behavior, edit `js/app.js`.
+
+Optional single-file pack:
+
+```bash
+python3 tools/pack.py
+```
 
 ---
 
 ## Features
 
-- **Bidirectional study** — Choose any From / To pair (e.g. English → Greek, Greek → Spanish, French → English). Swap with one click.
-- **Rich Greek ↔ English** — Full verb conjugations (present, aorist, future), nouns with gender/accusative, adjectives, adverbs, calendar terms, roots, and conversational phrases.
-- **Core survival sets** for Spanish, French, Italian, German, Dutch, and Portuguese (matched via English glosses where needed).
-- **Alphabet & pronunciation** for every supported language, including digraphs and sound rules.
-- **3D flip cards** with romanization, filters by category/class, and predictive search limited to the active language pair.
-- **UI language follows the “From” selection** — labels and prompts switch with your study direction.
-- **Fully offline** — one self-contained HTML file; no server or install required after download.
+- Bidirectional study for any From / To pair; swap with ⇄
+- Rich Greek ↔ English: verbs (present, aorist, future), nouns with gender, adjectives, adverbs, calendar, roots, phrases
+- Core survival sets for ES / FR / IT / DE / NL / PT (matched via English glosses)
+- Alphabet and digraphs for every supported language
+- Filters, predictive search (current pair only), UI language follows **From**
+- Zoom control; progress bar; example-sentence modal on verb tenses
 
 ### Supported languages
 
@@ -22,28 +61,13 @@ Greek · English · Spanish · French · Italian · German · Dutch · Portugues
 
 ---
 
-## Quick start
-
-1. Download [`flashcards.html`](./flashcards.html) (or open this repo on **GitHub Pages** if enabled).
-2. Open the file in a desktop browser (Chrome, Firefox, Safari, Edge).
-3. Select **From** and **To** languages, pick a category (Alphabet, Verbs, Nouns, …), and flip cards.
-
-> **iPhone / iPad:** Opening a local `.html` file in Chrome or Safari is restricted by iOS. Host the file (e.g. GitHub Pages, Netlify Drop, Cloudflare Pages) and open the HTTPS link instead.
-
----
-
 ## File integrity
 
-This distribution includes a **built-in integrity check**.
+The original single-file build could seal an MD5 of itself and lock the UI if the file was edited.
 
-When the app loads over a normal web connection (HTTPS or a local server), it verifies that the file has not been altered since it was sealed. If the check fails, the study interface is replaced with a message directing you to obtain the original from Andrioti School:
+**Source in this repo is unsealed** so we can expand it. `INTEGRITY_MD5` is the placeholder (all zeros), so the lock does not fire. If you pack a distribution file later, you can reseal that copy.
 
-> **Andrioti School**  
-> info@andrioti.com · (+30) 26610 25715
-
-The version number is shown in the lower-left corner of the app (e.g. `Version 1.0.1 (06.08.2026.00)`).
-
-Integrity verification requires the page to be served in a context where the browser can re-read its own source (typical when hosted). Opening as a raw `file://` link may skip the full-file check; the app still runs for study use.
+Andrioti School: info@andrioti.com · (+30) 26610 25715
 
 ---
 
@@ -51,27 +75,12 @@ Integrity verification requires the page to be served in a context where the bro
 
 | Control | Action |
 |--------|--------|
-| **From / To** dropdowns | Set study direction (same language disabled on both sides) |
+| **From / To** | Study direction (same language cannot be selected on both sides) |
 | **⇄** | Swap From and To |
 | Category tabs | Alphabet · Verbs · Nouns · Adjectives · Adverbs · Calendar · Roots · Phrases · Other |
-| Filters | Narrow by verb class, noun gender/category, etc. |
-| Search | Finds entries in the **current** language pair only |
-| Card flip | Click / tap the card (or Space) |
-| Zoom | Upper-left control scales the UI |
-
-For verbs, tap a tense heading where available to see an example sentence.
-
----
-
-## Hosting (optional)
-
-The app is a single static file. Suitable free hosts:
-
-- **GitHub Pages** — enable Pages on this repository (source: branch root or `/docs`)
-- **Netlify Drop** — drag `flashcards.html` (rename to `index.html` for a clean URL)
-- **Cloudflare Pages** — unlimited bandwidth on the free tier
-
-No build step is required.
+| Filters | Verb class/tense, noun gender/category, etc. |
+| Search | Current language pair only |
+| Card flip | Click / tap / Space |
 
 ---
 
@@ -79,13 +88,6 @@ No build step is required.
 
 Developed by **Andelorean Enterprises**, Cocoa Beach, FL, for **Andrioti School**.
 
-For the official original file or licensing questions, contact:
-
-- **Email:** info@andrioti.com  
-- **Phone:** (+30) 26610 25715  
-
----
-
 ## License
 
-All rights reserved unless otherwise stated by Andrioti School / Andelorean Enterprises. Redistribution of modified copies is not supported; modified files will fail the integrity check.
+See [LICENSE](./LICENSE) (GNU GPL v3 in this repository). Confirm with Andrioti School / Andelorean Enterprises before redistributing modified copies.
