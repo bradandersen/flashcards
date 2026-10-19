@@ -1,6 +1,6 @@
 # Flashcards — Multi-Language Vocabulary Trainer
 
-A static, offline flashcard app for learning vocabulary across several European languages. Built for **Andrioti School** (Corfu, Greece).
+A static, offline flashcard app for learning vocabulary across several European languages.
 
 **Version:** 1.0.5 (27.08.2026.00)
 
@@ -65,9 +65,7 @@ Greek · English · Spanish · French · Italian · German · Dutch · Portugues
 
 The original single-file build could seal an MD5 of itself and lock the UI if the file was edited.
 
-**Source in this repo is unsealed** so we can expand it. `INTEGRITY_MD5` is the placeholder (all zeros), so the lock does not fire. If you pack a distribution file later, you can reseal that copy.
-
-Andrioti School: info@andrioti.com · (+30) 26610 25715
+**Source in this repo is unsealed** so we can expand it. `INTEGRITY_MD5` is the placeholder (all zeros), so the lock does not fire. If you pack a distribution file later, you can reseal that copy. A sealed copy that fails the check points people to [github.com/bradandersen/flashcards](https://github.com/bradandersen/flashcards).
 
 ---
 
@@ -77,17 +75,19 @@ Andrioti School: info@andrioti.com · (+30) 26610 25715
 |--------|--------|
 | **From / To** | Study direction (same language cannot be selected on both sides) |
 | **⇄** | Swap From and To |
-| Category tabs | Alphabet · Verbs · Nouns · Adjectives · Adverbs · Calendar · Roots · Phrases · Other |
+| Category tabs | Alphabet · Verbs · Nouns · Adjectives · Adverbs · Calendar · Roots · Phrases · Other · **Tests** |
 | Filters | Verb class/tense, noun gender/category, etc. |
 | Search | Current language pair only |
 | Card flip | Click / tap / Space |
+| Progress slider | Drag under **Card X of Y** to jump (e.g. card 54 in a large pack) |
+| Tests | Multiple-choice or typed quizzes; scores saved in this browser (`localStorage`) |
 
 ---
 
 ## Credits
 
-Developed by **Andelorean Enterprises**, Cocoa Beach, FL, for **Andrioti School**.
+Developed by **Andelorean Enterprises**, Cocoa Beach, FL.
 
 ## License
 
-See [LICENSE](./LICENSE) (GNU GPL v3 in this repository). Confirm with Andrioti School / Andelorean Enterprises before redistributing modified copies.
+See [LICENSE](./LICENSE) (GNU GPL v3 in this repository).

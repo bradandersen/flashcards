@@ -18,7 +18,6 @@ const frontSub = document.getElementById('frontSub');
 const backContent = document.getElementById('backContent');
 const currentSpan = document.getElementById('current');
 const totalSpan = document.getElementById('total');
-const progressBar = document.getElementById('progress');
 
 function makeConjTable(forms) {
   let html = '<table class="conj"><thead><tr><th>Person</th><th>Greek</th><th>Roman</th></tr></thead><tbody>';
@@ -232,7 +231,42 @@ function makeAdjExample(card) {
   return list[hashPick(m + e, list.length)];
 }
 
+function syncDeckPosition() {
+  const n = currentSet.length || 0;
+  const pos = n ? Math.min(Math.max(currentIndex + 1, 1), n) : 0;
+  const u = t();
+  const statsEl = document.getElementById('stats');
+  if (statsEl) statsEl.innerHTML = n ? u.cardOf(pos, n) : u.cardOf(0, 0);
+  const slider = document.getElementById('cardSlider');
+  if (slider) {
+    slider.min = '1';
+    slider.max = String(Math.max(n, 1));
+    slider.value = String(Math.max(pos, 1));
+    slider.disabled = n <= 1;
+    const pct = n ? ((pos / n) * 100) : 0;
+    slider.style.setProperty('--slider-pct', pct + '%');
+    slider.setAttribute('aria-valuemin', '1');
+    slider.setAttribute('aria-valuemax', String(Math.max(n, 1)));
+    slider.setAttribute('aria-valuenow', String(Math.max(pos, 1)));
+    slider.setAttribute('aria-label', n ? u.cardOf(pos, n) : (u.title || 'Cards'));
+    slider.title = n ? u.cardOf(pos, n) : '';
+  }
+}
+
+function jumpToCard(n) {
+  const len = currentSet.length;
+  if (!len) return;
+  const idx = Math.min(Math.max(parseInt(n, 10) || 1, 1), len) - 1;
+  if (idx === currentIndex) {
+    syncDeckPosition();
+    return;
+  }
+  currentIndex = idx;
+  updateCard();
+}
+
 function updateCard(preserveFlip) {
+  if (mainMode === 'tests') return;
   const card = currentSet[currentIndex];
   if (!card) return;
 
@@ -300,10 +334,7 @@ function updateCard(preserveFlip) {
       frontSub.textContent = '';
       backContent.innerHTML = `<div style="opacity:.85;padding:1rem">Alphabet works for all languages. Roots/Other are Greek↔English only. Use Verbs, Nouns, Adjectives, Adverbs, Calendar or Phrases for ${cLang}.</div>`;
     }
-    const statsEl = document.getElementById('stats');
-    const progressBar = document.getElementById('progress');
-    if (statsEl) statsEl.innerHTML = u.cardOf(currentIndex + 1, currentSet.length);
-    if (progressBar) progressBar.style.width = (currentSet.length ? ((currentIndex + 1) / currentSet.length * 100) : 0) + '%';
+    syncDeckPosition();
     return;
   }
 
@@ -357,10 +388,7 @@ function updateCard(preserveFlip) {
       frontSub.textContent = '';
       backContent.innerHTML = `<div style="opacity:.85;padding:1rem">Alphabet works for all languages. Roots/Other are Greek↔English only.</div>`;
     }
-    const statsEl = document.getElementById('stats');
-    const progressBar = document.getElementById('progress');
-    if (statsEl) statsEl.innerHTML = u.cardOf(currentIndex + 1, currentSet.length);
-    if (progressBar) progressBar.style.width = (currentSet.length ? ((currentIndex + 1) / currentSet.length * 100) : 0) + '%';
+    syncDeckPosition();
     return;
   }
 
@@ -432,10 +460,7 @@ function updateCard(preserveFlip) {
       frontSub.textContent = '';
       backContent.innerHTML = `<div style="opacity:.85;padding:1rem">Alphabet, Roots and Other are Greek↔English only. Use Verbs, Nouns, Adjectives, Adverbs, Calendar or Phrases for Greek ↔ Spanish.</div>`;
     }
-    const statsEl = document.getElementById('stats');
-    const progressBar = document.getElementById('progress');
-    if (statsEl) statsEl.innerHTML = u.cardOf(currentIndex + 1, currentSet.length);
-    if (progressBar) progressBar.style.width = (currentSet.length ? ((currentIndex + 1) / currentSet.length * 100) : 0) + '%';
+    syncDeckPosition();
     return;
   }
 
@@ -480,10 +505,7 @@ function updateCard(preserveFlip) {
       frontSub.textContent = '';
       backContent.innerHTML = `<div style="opacity:.85;padding:1rem">Use Verbs, Nouns, Adjectives, Adverbs, Calendar or Phrases for Italian. Alphabet works for all languages.</div>`;
     }
-    const statsEl = document.getElementById('stats');
-    const progressBar = document.getElementById('progress');
-    if (statsEl) statsEl.innerHTML = u.cardOf(currentIndex + 1, currentSet.length);
-    if (progressBar) progressBar.style.width = (currentSet.length ? ((currentIndex + 1) / currentSet.length * 100) : 0) + '%';
+    syncDeckPosition();
     return;
   }
 
@@ -534,10 +556,7 @@ function updateCard(preserveFlip) {
       frontSub.textContent = '';
       backContent.innerHTML = `<div style="opacity:.85;padding:1rem">Alphabet works for all languages. Roots/Other are Greek↔English only.</div>`;
     }
-    const statsEl = document.getElementById('stats');
-    const progressBar = document.getElementById('progress');
-    if (statsEl) statsEl.innerHTML = u.cardOf(currentIndex + 1, currentSet.length);
-    if (progressBar) progressBar.style.width = (currentSet.length ? ((currentIndex + 1) / currentSet.length * 100) : 0) + '%';
+    syncDeckPosition();
     return;
   }
 
@@ -634,10 +653,7 @@ function updateCard(preserveFlip) {
       backContent.innerHTML = `<div style="opacity:.8;padding:1rem">This section is available for Greek ↔ English. Switch pair or choose Verbs / Nouns / Phrases for Spanish.</div>`;
     }
     // stats
-    const statsEl = document.getElementById('stats');
-    const progressBar = document.getElementById('progress');
-    if (statsEl) statsEl.innerHTML = u.cardOf(currentIndex + 1, currentSet.length);
-    if (progressBar) progressBar.style.width = (currentSet.length ? ((currentIndex + 1) / currentSet.length * 100) : 0) + '%';
+    syncDeckPosition();
     return;
   }
 
@@ -848,10 +864,7 @@ function updateCard(preserveFlip) {
     }
   }
 
-  const u = t();
-  const statsEl = document.getElementById('stats');
-  if (statsEl) statsEl.innerHTML = u.cardOf(currentIndex + 1, currentSet.length);
-  progressBar.style.width = (currentSet.length ? ((currentIndex + 1) / currentSet.length * 100) : 0) + '%';
+  syncDeckPosition();
   if (!preserveFlip && isFlipped) {
     flashcard.classList.remove('flipped');
     isFlipped = false;
@@ -997,16 +1010,90 @@ function filterPhrases() {
   updateCard();
 }
 
+function cardsForMode(mode) {
+  if (mode === 'kitchen') {
+    return cardsForMode('nouns').filter(n => n.cat === 'kitchen');
+  }
+  if (mode === 'mixed') {
+    return ['verbs', 'nouns', 'adjectives', 'adverbs', 'calendar', 'phrases']
+      .flatMap(m => cardsForMode(m));
+  }
+  if (mode === 'alphabet') return [...(typeof getAlphabetFor === 'function' ? getAlphabetFor(toLang) : alphabet)];
+  if (mode === 'adverbs') {
+    if (isGreekSpanishPair()) return [...getElEsAdverbs()];
+    if (isGreekItalianPair()) return [...getElItAdverbs()];
+    if (isCoreEnglishPair()) return [...(((getCore(coreLangOfPair()) || {}).adverbs) || [])];
+    if (isCoreGreekPair()) return [...getElCoreAdverbs(coreLangOfPair())];
+    return [...adverbs];
+  }
+  if (mode === 'other') return [...other];
+  if (mode === 'roots') return [...roots];
+
+  if (isGreekSpanishPair()) {
+    if (mode === 'verbs') return [...getElEsVerbs()];
+    if (mode === 'nouns') return [...getElEsNouns()];
+    if (mode === 'adjectives') return [...getElEsAdjectives()];
+    if (mode === 'calendar') return [...getElEsCalendar()];
+    if (mode === 'phrases') return [...getElEsPhrases()];
+  }
+  if (isGreekItalianPair()) {
+    if (mode === 'verbs') return [...getElItVerbs()];
+    if (mode === 'nouns') return [...getElItNouns()];
+    if (mode === 'adjectives') return [...getElItAdjectives()];
+    if (mode === 'calendar') return [...getElItCalendar()];
+    if (mode === 'phrases') return [...getElItPhrases()];
+  }
+  const cLang = coreLangOfPair();
+  if (cLang && isCoreEnglishPair()) {
+    const core = getCore(cLang) || {};
+    if (mode === 'verbs') return [...(core.verbs || [])];
+    if (mode === 'nouns') return [...(core.nouns || [])];
+    if (mode === 'adjectives') return [...(core.adjectives || [])];
+    if (mode === 'calendar') return [...(core.calendar || [])];
+    if (mode === 'phrases') return [...(core.phrases || [])];
+  }
+  if (cLang && isCoreGreekPair()) {
+    if (mode === 'verbs') return [...getElCoreVerbs(cLang)];
+    if (mode === 'nouns') return [...getElCoreNouns(cLang)];
+    if (mode === 'adjectives') return [...getElCoreAdjectives(cLang)];
+    if (mode === 'calendar') return [...getElCoreCalendar(cLang)];
+    if (mode === 'phrases') return [...getElCorePhrases(cLang)];
+  }
+  if (mode === 'verbs') return [...verbs];
+  if (mode === 'nouns') return [...nouns];
+  if (mode === 'adjectives') return [...adjectives];
+  if (mode === 'calendar') return [...timeItems];
+  if (mode === 'phrases') return [...phrases];
+  return [];
+}
+
+function setStudyChrome(on) {
+  ['searchWrap', 'stats', 'progressWrap', 'cardContainer', 'cardControls', 'keyboardHint'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('hidden', !on);
+  });
+  const panel = document.getElementById('testPanel');
+  if (panel) panel.classList.toggle('hidden', on);
+}
+
 function setMainMode(mode) {
   mainMode = mode;
   document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
-  document.querySelector(`[data-main="${mode}"]`).classList.add('active');
+  const tab = document.querySelector(`[data-main="${mode}"]`);
+  if (tab) tab.classList.add('active');
 
   // hide all filters
   ['alphabetFilters','verbClassFilters','verbTenseFilters','nounFilters','nounGenderFilters','adjFilters','calendarFilters','rootsFilters','phrasesFilters'].forEach(id => {
     document.getElementById(id).classList.add('hidden');
   });
   document.getElementById('digraphsSection').classList.add('hidden');
+
+  if (mode === 'tests') {
+    setStudyChrome(false);
+    if (typeof showTestHub === 'function') showTestHub();
+    return;
+  }
+  setStudyChrome(true);
 
   if (mode === 'alphabet') {
     document.getElementById('alphabetFilters').classList.remove('hidden');
@@ -1079,6 +1166,10 @@ flashcard.addEventListener('click', flip);
 document.getElementById('nextBtn').addEventListener('click', next);
 document.getElementById('prevBtn').addEventListener('click', prev);
 document.getElementById('shuffleBtn').addEventListener('click', shuffle);
+const cardSlider = document.getElementById('cardSlider');
+if (cardSlider) {
+  cardSlider.addEventListener('input', () => jumpToCard(cardSlider.value));
+}
 
 document.querySelectorAll('.main-tab').forEach(tab => {
   tab.addEventListener('click', () => setMainMode(tab.dataset.main));
@@ -1169,6 +1260,8 @@ document.querySelectorAll('#phrasesFilters .filter-btn').forEach(btn => {
 });
 
 document.addEventListener('keydown', e => {
+  if (mainMode === 'tests') return;
+  if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
   if (e.code === 'Space') { e.preventDefault(); flip(); }
   if (e.code === 'ArrowRight') next();
   if (e.code === 'ArrowLeft') prev();
@@ -1903,7 +1996,7 @@ const UI = {
     title: 'Flashcards',
     subtitle: 'Alphabet · Verbs · Nouns · Adjectives · Adverbs · Calendar · Roots · Phrases · Other',
     searchPh: 'Search…',
-    tabs: {alphabet:'Alphabet',verbs:'Verbs',nouns:'Nouns',adjectives:'Adjectives',adverbs:'Adverbs',calendar:'Calendar',roots:'Roots',phrases:'Phrases',other:'Other'},
+    tabs: {alphabet:'Alphabet',verbs:'Verbs',nouns:'Nouns',adjectives:'Adjectives',adverbs:'Adverbs',calendar:'Calendar',roots:'Roots',phrases:'Phrases',other:'Other',tests:'Tests'},
     cardOf: (c,t) => `Card ${c} of ${t}`,
     flipHint: 'Click or Space to flip',
     prev: '← Prev', shuffle: 'Shuffle', next: 'Next →',
@@ -1933,13 +2026,45 @@ const UI = {
       weights:'Weights', timewords:'Time Words',
       prefix:'Prefixes', verb:'Verb roots', noun:'Noun roots', number:'Numbers', bodyNature:'Body / nature', suffix:'Suffixes',
       survival:'Survival', social:'Social', foodShop:'Food / shop', travel:'Travel', opinions:'Opinions', patterns:'Sentence patterns'
+    },
+    quiz: {
+      intro: 'Quiz yourself on the current language pair. Scores stay on this device.',
+      topic: 'Topic',
+      length: 'Questions',
+      style: 'Type',
+      choice: 'Multiple choice',
+      typed: 'Type the answer',
+      start: 'Start test',
+      progress: 'Your progress',
+      noHistory: 'No tests yet — start one above.',
+      testsTaken: 'Tests taken',
+      overall: 'Overall accuracy',
+      last: 'Latest',
+      question: (i, n) => `Question ${i} of ${n}`,
+      check: 'Check',
+      nextQ: 'Next',
+      finish: 'See results',
+      correct: 'Correct',
+      incorrect: 'Not quite',
+      expected: 'Answer',
+      results: 'Results',
+      score: (c, tot) => `${c} / ${tot} correct`,
+      missed: 'Review misses',
+      again: 'Try again',
+      hub: 'All tests',
+      clear: 'Clear saved progress',
+      empty: 'Not enough cards in this topic for a test with the current language pair.',
+      mixed: 'Mixed',
+      kitchen: 'Kitchen/Grocery',
+      typedPh: 'Type the translation…',
+      byTopic: 'By topic'
     }
   },
   el: {
     title: 'Κάρτες',
     subtitle: 'Αλφάβητο · Ρήματα · Ουσιαστικά · Επίθετα · Επιρρήματα · Ημερολόγιο · Ρίζες · Φράσεις · Άλλα',
     searchPh: 'Αναζήτηση…',
-    tabs: {alphabet:'Αλφάβητο',verbs:'Ρήματα',nouns:'Ουσιαστικά',adjectives:'Επίθετα',adverbs:'Επιρρήματα',calendar:'Ημερολόγιο',roots:'Ρίζες',phrases:'Φράσεις',other:'Άλλα'},
+    tabs: {alphabet:'Αλφάβητο',verbs:'Ρήματα',nouns:'Ουσιαστικά',adjectives:'Επίθετα',adverbs:'Επιρρήματα',calendar:'Ημερολόγιο',roots:'Ρίζες',phrases:'Φράσεις',other:'Άλλα',tests:'Τεστ'},
     cardOf: (c,t) => `Κάρτα ${c} από ${t}`,
     flipHint: 'Κλικ ή Space για αναστροφή',
     prev: '← Προηγ.', shuffle: 'Ανακάτεμα', next: 'Επόμ. →',
@@ -1975,7 +2100,7 @@ const UI = {
     title: 'Tarjetas',
     subtitle: 'Alfabeto · Verbos · Sustantivos · Adjetivos · Adverbios · Calendario · Raíces · Frases · Otros',
     searchPh: 'Buscar…',
-    tabs: {alphabet:'Alfabeto',verbs:'Verbos',nouns:'Sustantivos',adjectives:'Adjetivos',adverbs:'Adverbios',calendar:'Calendario',roots:'Raíces',phrases:'Frases',other:'Otros'},
+    tabs: {alphabet:'Alfabeto',verbs:'Verbos',nouns:'Sustantivos',adjectives:'Adjetivos',adverbs:'Adverbios',calendar:'Calendario',roots:'Raíces',phrases:'Frases',other:'Otros',tests:'Tests'},
     cardOf: (c,t) => `Tarjeta ${c} de ${t}`,
     flipHint: 'Clic o Espacio para voltear',
     prev: '← Ant.', shuffle: 'Mezclar', next: 'Sig. →',
@@ -2011,7 +2136,7 @@ const UI = {
     title: 'Cartes',
     subtitle: 'Alphabet · Verbes · Noms · Adjectifs · Adverbes · Calendrier · Racines · Phrases · Autres',
     searchPh: 'Rechercher…',
-    tabs: {alphabet:'Alphabet',verbs:'Verbes',nouns:'Noms',adjectives:'Adjectifs',adverbs:'Adverbes',calendar:'Calendrier',roots:'Racines',phrases:'Phrases',other:'Autres'},
+    tabs: {alphabet:'Alphabet',verbs:'Verbes',nouns:'Noms',adjectives:'Adjectifs',adverbs:'Adverbes',calendar:'Calendrier',roots:'Racines',phrases:'Phrases',other:'Autres',tests:'Tests'},
     cardOf: (c,t) => `Carte ${c} sur ${t}`,
     flipHint: 'Clic ou Espace pour retourner',
     prev: '← Préc.', shuffle: 'Mélanger', next: 'Suiv. →',
@@ -2047,7 +2172,7 @@ const UI = {
     title: 'Carte',
     subtitle: 'Alfabeto · Verbi · Sostantivi · Aggettivi · Avverbi · Calendario · Radici · Frasi · Altro',
     searchPh: 'Cerca…',
-    tabs: {alphabet:'Alfabeto',verbs:'Verbi',nouns:'Sostantivi',adjectives:'Aggettivi',adverbs:'Avverbi',calendar:'Calendario',roots:'Radici',phrases:'Frasi',other:'Altro'},
+    tabs: {alphabet:'Alfabeto',verbs:'Verbi',nouns:'Sostantivi',adjectives:'Aggettivi',adverbs:'Avverbi',calendar:'Calendario',roots:'Radici',phrases:'Frasi',other:'Altro',tests:'Test'},
     cardOf: (c,t) => `Carta ${c} di ${t}`,
     flipHint: 'Clic o Spazio per girare',
     prev: '← Prec.', shuffle: 'Mescola', next: 'Succ. →',
@@ -2083,7 +2208,7 @@ const UI = {
     title: 'Karteikarten',
     subtitle: 'Alphabet · Verben · Nomen · Adjektive · Adverbien · Kalender · Wurzeln · Phrasen · Sonstiges',
     searchPh: 'Suchen…',
-    tabs: {alphabet:'Alphabet',verbs:'Verben',nouns:'Nomen',adjectives:'Adjektive',adverbs:'Adverbien',calendar:'Kalender',roots:'Wurzeln',phrases:'Phrasen',other:'Sonstiges'},
+    tabs: {alphabet:'Alphabet',verbs:'Verben',nouns:'Nomen',adjectives:'Adjektive',adverbs:'Adverbien',calendar:'Kalender',roots:'Wurzeln',phrases:'Phrasen',other:'Sonstiges',tests:'Tests'},
     cardOf: (c,t) => `Karte ${c} von ${t}`,
     flipHint: 'Klicken oder Leertaste zum Umdrehen',
     prev: '← Zurück', shuffle: 'Mischen', next: 'Weiter →',
@@ -2119,7 +2244,7 @@ const UI = {
     title: 'Flashcards',
     subtitle: 'Alfabet · Werkwoorden · Zelfstandige naamwoorden · Bijvoeglijke naamwoorden · Bijwoorden · Kalender · Wortels · Zinnen · Overig',
     searchPh: 'Zoeken…',
-    tabs: {alphabet:'Alfabet',verbs:'Werkwoorden',nouns:'Zelfstandige nw.',adjectives:'Bijvoeglijke nw.',adverbs:'Bijwoorden',calendar:'Kalender',roots:'Wortels',phrases:'Zinnen',other:'Overig'},
+    tabs: {alphabet:'Alfabet',verbs:'Werkwoorden',nouns:'Zelfstandige nw.',adjectives:'Bijvoeglijke nw.',adverbs:'Bijwoorden',calendar:'Kalender',roots:'Wortels',phrases:'Zinnen',other:'Overig',tests:'Toetsen'},
     cardOf: (c,t) => `Kaart ${c} van ${t}`,
     flipHint: 'Klik of Spatie om te draaien',
     prev: '← Vorige', shuffle: 'Schudden', next: 'Volgende →',
@@ -2155,7 +2280,7 @@ const UI = {
     title: 'Cartões',
     subtitle: 'Alfabeto · Verbos · Substantivos · Adjetivos · Advérbios · Calendário · Raízes · Frases · Outros',
     searchPh: 'Pesquisar…',
-    tabs: {alphabet:'Alfabeto',verbs:'Verbos',nouns:'Substantivos',adjectives:'Adjetivos',adverbs:'Advérbios',calendar:'Calendário',roots:'Raízes',phrases:'Frases',other:'Outros'},
+    tabs: {alphabet:'Alfabeto',verbs:'Verbos',nouns:'Substantivos',adjectives:'Adjetivos',adverbs:'Advérbios',calendar:'Calendário',roots:'Raízes',phrases:'Frases',other:'Outros',tests:'Testes'},
     cardOf: (c,t) => `Cartão ${c} de ${t}`,
     flipHint: 'Clique ou Espaço para virar',
     prev: '← Ant.', shuffle: 'Embaralhar', next: 'Próx. →',
@@ -2389,8 +2514,8 @@ function md5(str) {
 }
 
 function showIntegrityLock() {
-  const msg = 'This file has been modified, please contact Andrioti School at info@andrioti.com or (+30) 26610 25715 to obtain the original.';
-  document.body.innerHTML = '<div class="integrity-lock"><div class="integrity-lock-box">' + msg + '</div></div>';
+  const repo = 'https://github.com/bradandersen/flashcards';
+  document.body.innerHTML = '<div class="integrity-lock"><div class="integrity-lock-box">This file has been modified. Get the original from <a href="' + repo + '" target="_blank" rel="noopener">' + repo + '</a>.</div></div>';
 }
 
 function normalizeForIntegrity(text) {
